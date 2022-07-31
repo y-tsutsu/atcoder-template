@@ -10,6 +10,8 @@ def perm(n, r):
 
 
 def comb(n, r):
+    if n < r:
+        return 0
     r = min(r, n - r)
     return perm(n, r) // perm(r, r)
 
