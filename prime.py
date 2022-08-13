@@ -26,3 +26,16 @@ def is_prime(n):
         if n % i == 0:
             return False
     return True
+
+
+def primes(max):
+    ret = [2]
+    a = [1 for _ in range(max + 1)]
+    for i in range(3, max + 1, 2):
+        n = i
+        if a[n] == 1:
+            ret.append(n)
+        while n <= max:
+            a[n] += 1
+            n += i
+    return ret
