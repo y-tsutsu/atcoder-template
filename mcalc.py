@@ -26,3 +26,7 @@ def mcomb(n, r, mod):
         ret *= mpow(i + 1, mod - 2, mod)
         ret %= mod
     return ret
+
+
+def mcombr(n, r, mod):
+    return mcomb(n + r - 1, r, mod)

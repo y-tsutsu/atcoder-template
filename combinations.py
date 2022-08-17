@@ -13,6 +13,10 @@ def comb(n, r):
     return perm(n, r) // perm(r, r)
 
 
+def combr(n, r):
+    return comb(n + r - 1, r)
+
+
 def factorial_perm(n, r):
     return factorial(n) // factorial(n - r)
 
