@@ -1,19 +1,17 @@
 def mpow(base, exp, mod):
-    a = [1]  # 2のべき乗
-    while a[-1] * 2 <= exp:
-        a.append(a[-1] * 2)
-    b = {1: base % mod}  # x ** 2のべき乗数
-    for i in range(len(a) - 1):
-        b[a[i + 1]] = (b[a[i]] ** 2) % mod
-    c = []  # yを2のべき乗に分解
-    for x in a[::-1]:
-        if exp >= x:
-            c.append(x)
-            exp -= x
-    ret = 1
-    for x in c:
-        ret *= b[x]
+    a = [i for i, x in enumerate(f'{exp:b}'[::-1]) if x == '1']
+    i, j, p, ret = 1, 0, base, 1
+    if a[0] == 0:
+        j += 1
+        ret *= base
         ret %= mod
+    while j < len(a):
+        p = (p ** 2) % mod
+        if i == a[j]:
+            ret *= p
+            ret %= mod
+            j += 1
+        i += 1
     return ret
 
 
