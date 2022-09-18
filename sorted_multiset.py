@@ -11,7 +11,7 @@ class SortedMultiset:
             a = list(self)
         size = self.size = len(a)
         bucket_size = int(math.ceil(math.sqrt(size / self.BUCKET_RATIO)))
-        self.a = [a[size * i // bucket_size: size * (i + 1) // bucket_size] for i in range(bucket_size)]
+        self.a = [a[size * i // bucket_size:size * (i + 1) // bucket_size] for i in range(bucket_size)]
 
     def __init__(self, a=[]):
         a = list(a)
