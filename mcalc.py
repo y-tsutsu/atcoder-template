@@ -1,4 +1,6 @@
 def mpow(base, exp, mod):
+    if exp == 0:
+        return 1
     a = [i for i, x in enumerate(f'{exp:b}'[::-1]) if x == '1']
     i, j, p, ret = 1, 0, base, 1
     if a[0] == 0:
