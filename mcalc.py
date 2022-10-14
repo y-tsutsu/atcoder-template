@@ -30,3 +30,11 @@ def mcomb(n, r, mod):
 
 def mcombr(n, r, mod):
     return mcomb(n + r - 1, r, mod)
+
+
+def maccumulate(a, mod):
+    ret = a[:]
+    for i in range(len(a) - 1):
+        ret[i + 1] += ret[i]
+        ret[i + 1] %= mod
+    return ret
