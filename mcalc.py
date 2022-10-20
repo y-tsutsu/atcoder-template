@@ -17,6 +17,10 @@ def mpow(base, exp, mod):
     return ret
 
 
+def mdiv(n, r, mod):
+    return (n * mpow(r, mod - 2, mod)) % mod
+
+
 def mcomb(n, r, mod):
     if r > n:
         return 0
