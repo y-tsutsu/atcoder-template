@@ -6,6 +6,11 @@ def mdiv(n, r, mod):
     return (n * pow(r, mod - 2, mod)) % mod
 
 
+def mdiv2(n, r, mod):
+    ''' modが素数でないバージョン (n / r) % mod => (n % (mod * r)) // r '''
+    return (n % (mod * r)) // r
+
+
 def mcomb(n, r, mod):
     if r > n:
         return 0
