@@ -2,6 +2,14 @@ def mpow(base, exp, mod):
     return pow(base, exp, mod)  # 標準関数でmod対応されている
 
 
+def mpow_of_mpow(a, b, c, mod):
+    ''' (a ** (b ** c)) % mod '''
+    if a % mod == 0:
+        return 0
+    x = pow(b, c, mod - 1)
+    return pow(a, x, mod)
+
+
 def mdiv(n, r, mod):
     return (n * pow(r, mod - 2, mod)) % mod
 
