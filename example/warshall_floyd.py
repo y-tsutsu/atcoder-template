@@ -9,6 +9,7 @@ for i in range(n):
     d[i][i] = 0  # 自分自身への移動は0
 for a, b, c in abc:
     d[a][b] = c  # aからbへの直接の距離cを設定
+    # d[b][a] = c  # 無効グラフなら必要!!! bからaへの直接の距離cを設定
 
 
 def warshall_floyd(n):
