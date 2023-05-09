@@ -82,3 +82,33 @@ def calc_distance(px, py, ax, ay, bx, by):
             u = abs(sfol.a * px + sfol.b * py - sfol.c)
             v = (sfol.a ** 2 + sfol.b ** 2) ** 0.5
             return u / v
+
+
+def intersect(ax, ay, bx, by, cx, cy, dx, dy):
+    '''線分ABと線分CDが交差するか判定'''
+    if Sfol(ax, ay, bx, by) == Sfol(cx, cy, dx, dy):
+        ax, bx = min(ax, bx), max(ax, bx)
+        cx, dx = min(cx, dx), max(cx, dx)
+        if max(ax, cx) > min(bx, dx):
+            return False
+        ay, by = min(ay, by), max(ay, by)
+        cy, dy = min(cy, dy), max(cy, dy)
+        if max(ay, cy) > min(by, dy):
+            return False
+        return True
+    else:
+        ab = Vec(bx - ax, by - ay)
+        ac = Vec(cx - ax, cy - ay)
+        ad = Vec(dx - ax, dy - ay)
+        s = ab.cross(ac)
+        t = ab.cross(ad)
+        if s * t > 0:
+            return False
+        cd = Vec(dx - cx, dy - cy)
+        ca = Vec(ax - cx, ay - cy)
+        cb = Vec(bx - cx, by - cy)
+        s = cd.cross(ca)
+        t = cd.cross(cb)
+        if s * t > 0:
+            return False
+        return True
