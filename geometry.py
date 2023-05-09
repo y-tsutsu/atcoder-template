@@ -53,3 +53,32 @@ class Vec:
         '''1:反時計回り, -1:時計回り, 0:直線上'''
         s = self.cross(other)
         return 1 if s > 0 else (-1 if s < 0 else 0)
+
+    def dot(self, other):
+        '''内積'''
+        return self.x * other.x + self.y * other.y
+
+
+def calc_distance(px, py, ax, ay, bx, by):
+    '''点Pと線分ABとの距離'''
+    ap = Vec(px - ax, py - ay)
+    ab = Vec(bx - ax, by - ay)
+    bp = Vec(px - bx, py - by)
+    ba = Vec(ax - bx, ay - by)
+    if ap.dot(ab) < 0:
+        # 線分PAが最短距離
+        return ((px - ax) ** 2 + (py - ay) ** 2) ** 0.5
+    elif bp.dot(ba) < 0:
+        # 線分PBが最短距離
+        return ((px - bx) ** 2 + (py - by) ** 2) ** 0.5
+    else:
+        # 点Pから線分ABへの垂線が最短距離
+        sfol = Sfol(ax, ay, bx, by)
+        if sfol.a == 0:
+            return abs(px - ax)
+        elif sfol.b == 0:
+            return abs(py - ay)
+        else:
+            u = abs(sfol.a * px + sfol.b * py - sfol.c)
+            v = (sfol.a ** 2 + sfol.b ** 2) ** 0.5
+            return u / v

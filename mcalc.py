@@ -3,7 +3,7 @@ def mpow(base, exp, mod):
 
 
 def mpow_of_mpow(a, b, c, mod):
-    ''' (a ** (b ** c)) % mod '''
+    '''(a ** (b ** c)) % mod'''
     if a % mod == 0:
         return 0
     x = pow(b, c, mod - 1)
@@ -15,7 +15,7 @@ def mdiv(n, r, mod):
 
 
 def mdiv2(n, r, mod):
-    ''' modが素数でないバージョン (n / r) % mod => (n % (mod * r)) // r '''
+    '''modが素数でないバージョン (n / r) % mod => (n % (mod * r)) // r'''
     return (n % (mod * r)) // r
 
 

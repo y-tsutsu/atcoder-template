@@ -3,7 +3,7 @@ class SortedSet:
 
 
 def inv_num(a):
-    ''' 転倒数 '''
+    '''転倒数'''
     tot = 0
     ss = SortedSet()
     for v in a:

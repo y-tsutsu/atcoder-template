@@ -23,7 +23,7 @@ class SegTree:
         return self._d[p + self._size]
 
     def prod(self, s, e):
-        ''' [s, e) '''
+        '''[s, e)'''
         sml, smr = self._e(), self._e()
         s += self._size
         e += self._size
