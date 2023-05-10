@@ -84,6 +84,15 @@ def calc_distance(px, py, ax, ay, bx, by):
             return u / v
 
 
+def calc_intersection_point(px, py, ax, ay, bx, by):
+    '''点Pから直線ABへの垂線の交点'''
+    sfol = Sfol(ax, ay, bx, by)
+    a, b, c = sfol.a, sfol.b, -sfol.c
+    x = ((b ** 2) * px - a * b * py - a * c) / (a ** 2 + b ** 2)
+    y = ((a ** 2) * py - a * b * px - b * c) / (a ** 2 + b ** 2)
+    return x, y
+
+
 def intersect(ax, ay, bx, by, cx, cy, dx, dy):
     '''線分ABと線分CDが交差するか判定'''
     if Sfol(ax, ay, bx, by) == Sfol(cx, cy, dx, dy):
