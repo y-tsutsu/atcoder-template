@@ -1,9 +1,12 @@
+from sys import maxsize
+
+
 class SegTree:
     pass
 
 
 def manhattan_mst(n, x, y):
-    INF = 10 ** 18
+    INF = maxsize
     ret = [INF for _ in range(n)]
 
     xy = [(i, j) for i, j in zip(x, y)]

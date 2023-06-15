@@ -1,4 +1,6 @@
-INF = 10 ** 18
+from sys import maxsize
+
+INF = maxsize
 
 n = 23  # nは頂点数
 m = 42  # mは辺数
