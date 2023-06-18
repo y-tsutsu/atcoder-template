@@ -5,7 +5,8 @@ class StrHash:
         self.h = self._init_hash()
 
     def get_hash(self, s, e):
-        v = self.h[e + 1] - (self.h[s] * pow(100, e - s + 1, self.mod) % self.mod)
+        '''[s, e)'''
+        v = self.h[e] - (self.h[s] * pow(100, e - s, self.mod) % self.mod)
         v %= self.mod
         return v
 
