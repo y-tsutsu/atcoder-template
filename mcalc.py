@@ -40,3 +40,15 @@ def maccumulate(a, mod):
         ret[i + 1] += ret[i]
         ret[i + 1] %= mod
     return ret
+
+
+def sum(a, r, n, mod):
+    '''等比数列の和（a:初項 r:公比 n:工数）'''
+    if n == 1:
+        return a % mod
+    x = sum(a, r, n // 2, mod)
+    ret = (x + pow(r, n // 2, mod) * x) % mod
+    if n % 2 == 1:
+        ret += pow(r, n - 1, mod)
+        ret %= mod
+    return ret
