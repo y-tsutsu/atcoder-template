@@ -41,6 +41,10 @@ class SegTree:
     def all_prod(self):
         return self._d[1]
 
+    def update(self, p, x, func):
+        y = self.get(p)
+        self.set(p, func(x, y))
+
 
 def example():
     # 二項演算（二つの値からどう計算するか．指定区間の最大値を求めたい場合はmaxをとるなど．）
