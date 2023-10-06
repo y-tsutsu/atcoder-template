@@ -43,7 +43,7 @@ def maccumulate(a, mod):
 
 
 def sum(a, r, n, mod):
-    '''等比数列の和（a:初項 r:公比 n:工数）'''
+    '''等比数列の和（a:初項 r:公比 n:項数）'''
     if n == 1:
         return a % mod
     x = sum(a, r, n // 2, mod)
