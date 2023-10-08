@@ -1,4 +1,4 @@
-class Cmp:
+class Comparable:
     '''sortの比較は__lt__()が定義されていればOK'''
 
     def __init__(self):
