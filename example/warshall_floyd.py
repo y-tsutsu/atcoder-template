@@ -1,6 +1,6 @@
 from sys import maxsize
 
-INF = maxsize
+INF = maxsize // 4  # ワーシャルフロイドでmaxsizeを使うと計算が遅くなるので注意
 
 n = 23  # nは頂点数
 m = 42  # mは辺数
