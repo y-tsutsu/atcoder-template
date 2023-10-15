@@ -1,3 +1,6 @@
+from itertools import accumulate
+
+
 def lcs(s, t):
     '''最長共通部分列'''
     dp = [0 for _ in range(len(t) + 1)]
@@ -40,3 +43,17 @@ def lis(a):
         else:
             d[j] = min(d[j], a[i])
     return max(dp)
+
+
+def count_sum_num(value, count, min_, max_):
+    '''整数をcount個まで選んで総和がvalue以下になる場合の数（使える数字はmin_～max_）
+    dp[i][j]: 整数をi個選んでjをつくる場合の数'''
+    dp = [[0 for _ in range(value + 1)] for _ in range(count + 1)]
+    dp[0][0] = 1
+    for i in range(count):
+        acm = list(accumulate(dp[i], initial=0))
+        for j in range(value + 1):
+            s = max(0, j - max_)
+            e = max(-1, j - min_)
+            dp[i + 1][j] = acm[e + 1] - acm[s]
+    return dp
