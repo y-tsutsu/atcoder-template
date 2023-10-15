@@ -1,3 +1,6 @@
+from collections import Counter, defaultdict
+
+
 def mpow(base, exp, mod):
     return pow(base, exp, mod)  # 標準関数でmod対応されている
 
@@ -42,13 +45,29 @@ def maccumulate(a, mod):
     return ret
 
 
-def sum(a, r, n, mod):
-    '''等比数列の和（a:初項 r:公比 n:項数）'''
+def mgeosum(a, r, n, mod):
+    '''等比数列の和のMOD版（a:初項 r:公比 n:項数）'''
     if n == 1:
         return a % mod
     x = sum(a, r, n // 2, mod)
     ret = (x + pow(r, n // 2, mod) * x) % mod
     if n % 2 == 1:
         ret += pow(r, n - 1, mod)
+        ret %= mod
+    return ret
+
+
+def mlcm(a, mod):
+    '''最小公倍数のMOD版'''
+    def prime_factorize(x):
+        pass
+    p = [Counter(prime_factorize(x)) for x in a]
+    d = defaultdict(int)
+    for c in p:
+        for k, v in c.items():
+            d[k] = max(d[k], v)
+    ret = 1
+    for k, v in d.items():
+        ret *= pow(k, v, mod)
         ret %= mod
     return ret
