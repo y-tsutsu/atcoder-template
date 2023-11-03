@@ -46,6 +46,23 @@ class SegTree:
         self.set(p, func(x, y))
 
 
+class SegTreeAddRange:
+    '''区間加算用Segtree'''
+
+    def __init__(self, n, v=None):
+        def op(x, y): return x + y
+        def e(): return 0
+        self._st = SegTree(op, e, n, v)
+
+    def add(self, s, e, x):
+        '''[s, e)'''
+        self._st.update(s, x, lambda x, y: x + y)
+        self._st.update(e, -x, lambda x, y: x + y)
+
+    def get(self, p):
+        return self._st.prod(0, p + 1)
+
+
 def example():
     # 二項演算（二つの値からどう計算するか．指定区間の最大値を求めたい場合はmaxをとるなど．）
     def op(x, y): return max(x, y)
