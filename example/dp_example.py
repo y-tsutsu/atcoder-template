@@ -57,3 +57,17 @@ def count_sum_num(value, count, min_, max_):
             e = max(-1, j - min_)
             dp[i + 1][j] = acm[e + 1] - acm[s]
     return dp
+
+
+def count_sum_less_than(a):
+    '''数列から各項を自由に選択したときの各項の総和がある数以下になる場合の数
+    dp[i][j]: 数列をi個目まで選んで総和がj以下になる場合の数'''
+    MOD = 998244353
+    MAX = 5005
+    dp = [[1 for _ in range(MAX)] for _ in range(len(a) + 1)]
+    for i, v in enumerate(a):
+        dp[i + 1] = dp[i][:]
+        for j in range(v, MAX):
+            dp[i + 1][j] += dp[i][j - v]
+            dp[i + 1][j] %= MOD
+    return dp
