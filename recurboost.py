@@ -1,13 +1,16 @@
-from functools import wraps
+from functools import partial, wraps
 from types import GeneratorType
 
 
-def recurboost(f, stack=[]):
-    @wraps(f)
+def recurboost(func=None, stack=[]):
+    if func is None:
+        return partial(recurboost, stack=stack)
+
+    @wraps(func)
     def wrappedfunc(*args, **kwargs):
         if stack:
-            return f(*args, **kwargs)
-        to = f(*args, **kwargs)
+            return func(*args, **kwargs)
+        to = func(*args, **kwargs)
         while True:
             if isinstance(to, GeneratorType):
                 stack.append(to)
@@ -21,13 +24,16 @@ def recurboost(f, stack=[]):
     return wrappedfunc
 
 
-def recurboostmemo(f, stack=[], memo={}, args_list=[]):
-    @wraps(f)
-    def wrappedfunc(*args):
+def recurboostmemo(func=None, stack=[], memo={}, args_list=[]):
+    if func is None:
+        return partial(recurboostmemo, stack=stack, memo=memo, args_list=args_list)
+
+    @wraps(func)
+    def wrappedfunc(*args, **kwargs):
         args_list.append(args)
         if stack:
-            return f(*args)
-        to = f(*args)
+            return func(*args, **kwargs)
+        to = func(*args, **kwargs)
         while True:
             if args_list[-1] in memo:
                 if not isinstance(to, GeneratorType):
