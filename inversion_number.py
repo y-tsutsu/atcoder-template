@@ -11,7 +11,7 @@ def inv_num(a):
     p = compress(a)
     tot = 0
     bit = BIT(max(p) + 1)
-    for i, v in enumerate(a):
+    for i, v in enumerate(p):
         tot += i - bit.sum(0, v + 1)
         bit.add(v, 1)
     return tot
