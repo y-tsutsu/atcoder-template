@@ -1,4 +1,20 @@
-from math import gcd
+from math import cos, gcd, sin
+
+
+def is_collinear(p1, p2, p3):
+    return 0 == (p1[0] - p3[0]) * (p2[1] - p3[1]) - (p2[0] - p3[0]) * (p1[1] - p3[1])
+
+
+def calc_triangle_area(p1, p2, p3):
+    return abs((p1[0] - p3[0]) * (p2[1] - p3[1]) - (p2[0] - p3[0]) * (p1[1] - p3[1])) / 2
+
+
+def rotate_origin(x, y, radian):
+    return x * cos(radian) - y * sin(radian), x * sin(radian) + y * cos(radian)
+
+
+def rotate(x, y, cx, cy, radian):
+    return tuple(a + b for a, b in zip(rotate_origin(x - cx, y - cy, radian), (cx, cy)))
 
 
 class Sfol:

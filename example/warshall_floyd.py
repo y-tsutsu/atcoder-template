@@ -14,14 +14,14 @@ for a, b, c in abc:
     # d[b][a] = c  # 無向グラフなら必要!!! bからaへの直接の距離cを設定
 
 
-def warshall_floyd(n):
+def warshall_floyd(n, d):
     for k in range(n):  # kは経由する頂点
         for i in range(n):
             for j in range(n):
                 d[i][j] = min(d[i][j], d[i][k] + d[k][j])
 
 
-warshall_floyd(n)
+warshall_floyd(n, d)
 
 # 負閉路判定
 for i in range(n):
