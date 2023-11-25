@@ -20,3 +20,18 @@ class BIT:
             s += self._d[e - 1]
             e -= e & -e
         return s
+
+
+class BITAddRange:
+    '''区間加算用BIT'''
+
+    def __init__(self, n):
+        self._bit = BIT(n)
+
+    def add(self, s, e, x):
+        '''[s, e)'''
+        self._bit.add(s, x)
+        self._bit.add(e, -x)
+
+    def get(self, p):
+        return self._bit.sum(0, p + 1)
