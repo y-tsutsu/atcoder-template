@@ -34,4 +34,5 @@ class UnionFind:
             result[self.find(i)].append(i)
         return [x for x in result if x]
 
-    def count(self): return self._count
+    def count(self):
+        return self._count
