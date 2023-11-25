@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
-from sys import setrecursionlimit, stdin
-
-setrecursionlimit(10 ** 9)
+from sys import stdin
 
 _tokens = (y for x in stdin for y in x.split())
 def read(): return next(_tokens)

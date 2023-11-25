@@ -1,7 +1,19 @@
 from itertools import pairwise
 from math import dist, isqrt
 from statistics import mode, multimode
-from sys import set_int_max_str_digits
+from sys import set_int_max_str_digits, setrecursionlimit
+
+'''再帰関数の高速化（PyPy）'''
+try:
+    import pypyjit  # type: ignore
+    pypyjit.set_param('max_unroll_recursion=-1')
+except Exception:
+    pass
+
+
+'''再帰呼び出しの上限数設定'''
+setrecursionlimit(10 ** 9)
+
 
 '''str->int変換の制限解除'''
 set_int_max_str_digits(0)
