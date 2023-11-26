@@ -26,7 +26,7 @@ def mcomb(n, r, mod):
     if r > n:
         return 0
     ret = 1
-    for i in range(r):
+    for i in range(min(r, n - r)):
         ret *= n - i
         ret *= pow(i + 1, mod - 2, mod)
         ret %= mod
