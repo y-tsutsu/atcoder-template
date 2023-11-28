@@ -1,6 +1,6 @@
 from itertools import pairwise
 from math import dist, isqrt
-from statistics import mode, multimode
+from statistics import median, mode, multimode
 from sys import set_int_max_str_digits, setrecursionlimit
 
 '''再帰関数の高速化（PyPy）'''
@@ -51,6 +51,13 @@ for i, j in pairwise(a):
 a = [1, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5]
 print(mode(a))
 print(multimode(a))
+
+
+'''マンハッタン距離の総和を最小化するときは中央値を使う'''
+x = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+m = int(median(x))
+tot = sum([abs(m - v) for v in x])
+print(tot)
 
 
 '''ユークリッド距離'''
