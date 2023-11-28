@@ -2,7 +2,15 @@ from collections import Counter, defaultdict
 
 
 def mpow(base, exp, mod):
-    return pow(base, exp, mod)  # 標準関数でmod対応されている
+    ret = 1
+    while exp:
+        if exp % 2:
+            ret *= base
+            ret %= mod
+        base *= base
+        base %= mod
+        exp >>= 1
+    return ret
 
 
 def mpow_of_mpow(a, b, c, mod):
@@ -35,6 +43,27 @@ def mcomb(n, r, mod):
 
 def mcombr(n, r, mod):
     return mcomb(n + r - 1, r, mod)
+
+
+class MComb:
+    def __init__(self, max_, mod):
+        self._mod = mod
+        self._fact = [1, 1]
+        self._factinv = [1, 1]
+        inv = [0, 1]
+        for i in range(2, max_ + 1):
+            self._fact.append((self._fact[-1] * i) % mod)
+            inv.append((-inv[mod % i] * (mod // i)) % mod)
+            self._factinv.append((self._factinv[-1] * inv[-1]) % mod)
+
+    def comb(self, n, r):
+        if r < 0 or r > n:
+            return 0
+        r = min(r, n - r)
+        return (self._fact[n] * self._factinv[r] * self._factinv[n - r]) % self._mod
+
+    def combr(self, n, r):
+        return self.comb(n + r - 1, r)
 
 
 def maccumulate(a, mod):
