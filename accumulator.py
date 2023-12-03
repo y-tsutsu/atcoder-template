@@ -3,10 +3,7 @@ from itertools import accumulate
 
 def acm_helper(a):
     acm = list(accumulate(a, initial=0))
-
-    def helper(s, e):
-        return acm[e] - acm[s]
-
+    def helper(s, e): return acm[e] - acm[s]
     return helper
 
 
@@ -24,10 +21,7 @@ def accumulate2dim(a):
 
 def acm2dim_helper(a):
     acm = accumulate2dim(a)
-
-    def helper(si, sj, ei, ej):
-        return acm[ei][ej] - acm[si][ej] - acm[ei][sj] + acm[si][sj]
-
+    def helper(si, sj, ei, ej): return acm[ei][ej] - acm[si][ej] - acm[ei][sj] + acm[si][sj]
     return helper
 
 
