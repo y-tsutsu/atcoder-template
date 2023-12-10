@@ -14,7 +14,7 @@ class BpMatch:
             self._dinic.add_edge(self._n0 + i, self._n + 1, 1)
 
     def add_edge(self, fr, to, cap=1):
-        self._dinic.add_edge(fr, to, cap)
+        self._dinic.add_edge(fr, self._n0 + to, cap)
 
     def flow(self):
         return self._dinic.flow(self._n, self._n + 1)
