@@ -25,11 +25,23 @@ def acm2dim_helper(a):
     return helper
 
 
+def imos_helper(n):
+    p = [0 for _ in range(n + 1)]
+
+    def set_helper(s, e, x):
+        p[s] += x
+        p[e] -= x
+
+    def acm_helper(): return list(accumulate(p))[:-1]
+
+    return set_helper, acm_helper
+
+
 def imos2d_helper(h, w):
     p = [[0 for _ in range(w + 1)] for _ in range(h + 1)]
 
-    def set_helper(si, sj, ei, ej):
-        for i, j, v in [(si, sj, 1), (ei, sj, -1), (si, ej, -1), (ei, ej, 1)]:
+    def set_helper(si, sj, ei, ej, x):
+        for i, j, v in [(si, sj, x), (ei, sj, -x), (si, ej, -x), (ei, ej, x)]:
             p[i][j] += v
 
     def acm_helper(): return accumulate2dim(p)
