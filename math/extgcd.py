@@ -6,3 +6,12 @@ def extgcd(a, b):
         return a, 1, 0
     g, x, y = extgcd(b, a % b)
     return g, y, x - a // b * y
+
+
+def solve_linear_indefinite_equation(a, b, c):
+    '''(x, y): ax + by = c'''
+    g, x, y = extgcd(a, b)
+    if c % g != 0:
+        return None
+    v = c // g
+    return x * v, y * v
