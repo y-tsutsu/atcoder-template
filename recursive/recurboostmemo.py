@@ -8,22 +8,28 @@ def recurboostmemo(func=None, stack=[], memo={}, args_list=[]):
 
     @wraps(func)
     def wrappedfunc(*args, **kwargs):
+        def _key(a): return a[0] if len(a) == 1 else a
         args_list.append(args)
         if stack:
             return func(*args, **kwargs)
+        memo.clear()
         to = func(*args, **kwargs)
         while True:
-            if args_list[-1] in memo:
+            k = _key(args_list[-1])
+            m = memo.get(k, None)
+            if m is not None:
                 if not isinstance(to, GeneratorType):
                     stack.pop()
-                res = memo[args_list.pop()]
+                args_list.pop()
+                res = m
                 to = stack[-1].send(res)
                 continue
             if isinstance(to, GeneratorType):
                 stack.append(to)
                 to = next(to)
             else:
-                memo[args_list.pop()] = to
+                args_list.pop()
+                memo[k] = to
                 stack.pop()
                 if not stack:
                     break
