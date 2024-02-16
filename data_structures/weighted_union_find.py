@@ -7,11 +7,10 @@ class WeightedUnionFind:
     def find(self, i):
         if self._par[i] == i:
             return i
-        else:
-            y = self.find(self._par[i])
-            self._weight[i] += self._weight[self._par[i]]
-            self._par[i] = y
-            return y
+        y = self.find(self._par[i])
+        self._weight[i] += self._weight[self._par[i]]
+        self._par[i] = y
+        return y
 
     def unite(self, i, j, w):
         rx = self.find(i)
