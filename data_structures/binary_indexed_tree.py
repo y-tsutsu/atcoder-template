@@ -35,3 +35,15 @@ class BITAddRange:
 
     def get(self, p):
         return self._bit.sum(0, p + 1)
+
+
+class BITHelper:
+    def __init__(self, n):
+        self._bit = BIT(n)
+
+    def set(self, p, x):
+        y = self.get(p)
+        self._bit.add(p, x - y)
+
+    def get(self, p):
+        return self._bit.sum(p, p + 1)
