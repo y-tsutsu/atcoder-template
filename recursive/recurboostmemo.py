@@ -16,13 +16,12 @@ def recurboostmemo(func=None, stack=[], memo={}, args_list=[]):
         to = func(*args, **kwargs)
         while True:
             k = _key(args_list[-1])
-            m = memo.get(k, None)
-            if m is not None:
+            v = memo.get(k, None)
+            if v is not None:
                 if not isinstance(to, GeneratorType):
                     stack.pop()
                 args_list.pop()
-                res = m
-                to = stack[-1].send(res)
+                to = stack[-1].send(v)
                 continue
             if isinstance(to, GeneratorType):
                 stack.append(to)

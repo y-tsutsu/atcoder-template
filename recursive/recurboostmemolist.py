@@ -13,20 +13,20 @@ def recurboostmemolist(func=None, stack=[], memo=[[None]], args_list=[]):
             return func(*args, **kwargs)
         to = func(*args, **kwargs)
         while True:
-            i, j = args_list[-1]
-            if memo[i][j] is not None:
+            t = args_list[-1]
+            v = memo[t[0]][t[1]]
+            if v is not None:
                 if not isinstance(to, GeneratorType):
                     stack.pop()
-                i, j = args_list.pop()
-                res = memo[i][j]
-                to = stack[-1].send(res)
+                args_list.pop()
+                to = stack[-1].send(v)
                 continue
             if isinstance(to, GeneratorType):
                 stack.append(to)
                 to = next(to)
             else:
-                i, j = args_list.pop()
-                memo[i][j] = to
+                args_list.pop()
+                memo[t[0]][t[1]] = to
                 stack.pop()
                 if not stack:
                     break
