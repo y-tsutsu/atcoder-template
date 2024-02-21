@@ -28,13 +28,13 @@ def is_prime(n):
     return True
 
 
-def primes(max):
-    a = [0 for _ in range(max + 1)]
-    for i in range(2, int(max ** 0.5) + 1):
+def primes(n):
+    a = [0 for _ in range(n + 1)]
+    for i in range(2, int(n ** 0.5) + 1):
         if a[i] != 0:
             continue
-        n = i * 2
-        while n <= max:
-            a[n] = 1
-            n += i
+        p = i * 2
+        while p <= n:
+            a[p] = 1
+            p += i
     return [i for i, x in enumerate(a) if i >= 2 and x == 0]

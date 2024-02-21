@@ -7,3 +7,13 @@ def divisors(n):
                 continue
             ud.append(n // i)
     return ld + ud[::-1]
+
+
+def div_counts(n):
+    ret = [0 for _ in range(n + 1)]
+    for i in range(1, n + 1):
+        p = i
+        while p <= n:
+            ret[p] += 1
+            p += i
+    return ret
