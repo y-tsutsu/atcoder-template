@@ -1,4 +1,4 @@
-from functools import lru_cache
+from functools import cache
 from math import factorial
 
 
@@ -25,7 +25,7 @@ def factorial_comb(n, r):
     return factorial(n) // (factorial(n - r) * factorial(r))
 
 
-@lru_cache(maxsize=1000000)
+@cache
 def pascal_comb(n, r):
     if r == 0 or n == r:
         return 1
