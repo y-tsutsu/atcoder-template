@@ -10,7 +10,7 @@ class Doubling:
             self._d.append(p)
 
     def query(self, pos, n):
-        '''posをn回移動する'''
+        '''posからn回移動する'''
         for i in range(self._max - 1, -1, -1):
             if n >> i & 1 == 0:
                 continue
