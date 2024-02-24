@@ -2,7 +2,7 @@ import math
 from bisect import bisect_left, bisect_right
 
 
-class SortedMultiset():
+class SortedMultiset:
     BUCKET_RATIO = 16
     SPLIT_RATIO = 24
 
