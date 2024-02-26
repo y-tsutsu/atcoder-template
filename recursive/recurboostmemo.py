@@ -6,17 +6,21 @@ def recurboostmemo(func=None, stack=[], memo={}, args_list=[]):
     if func is None:
         return partial(recurboostmemo, stack=stack, memo=memo, args_list=args_list)
 
+    if isinstance(memo, dict):
+        def getter(t): return memo.get(t, None)
+        def setter(t, x): memo[t] = x
+    else:
+        def getter(t): return memo[t[0]][t[1]]
+        def setter(t, x): memo[t[0]][t[1]] = x
+
     @wraps(func)
     def wrappedfunc(*args, **kwargs):
-        def _key(a): return a[0] if len(a) == 1 else a
         args_list.append(args)
         if stack:
             return func(*args, **kwargs)
-        memo.clear()
         to = func(*args, **kwargs)
         while True:
-            k = _key(args_list[-1])
-            v = memo.get(k, None)
+            v = getter(args_list[-1])
             if v is not None:
                 if not isinstance(to, GeneratorType):
                     stack.pop()
@@ -27,8 +31,7 @@ def recurboostmemo(func=None, stack=[], memo={}, args_list=[]):
                 stack.append(to)
                 to = next(to)
             else:
-                args_list.pop()
-                memo[k] = to
+                setter(args_list.pop(), to)
                 stack.pop()
                 if not stack:
                     break
