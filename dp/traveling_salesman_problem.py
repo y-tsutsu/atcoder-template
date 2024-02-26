@@ -1,11 +1,11 @@
 from sys import maxsize
 
 
-def tsp(n, cost):
+def tsp(n, cost, s=0):
     '''巡回セールスマン問題'''
     INF = maxsize
     dp = [[INF for _ in range(n)] for _ in range(1 << n)]
-    dp[0][0] = 0
+    dp[0][s] = 0
     for s in range(1 << n):
         for i in range(n):
             if dp[s][i] == INF:
@@ -15,3 +15,4 @@ def tsp(n, cost):
                     continue
                 ns = s | 1 << ni
                 dp[ns][ni] = min(dp[ns][ni], dp[s][i] + cost[i][ni])
+    return dp
