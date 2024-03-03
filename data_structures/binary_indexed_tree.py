@@ -39,11 +39,11 @@ class BITAddRange:
 
 class BITHelper:
     def __init__(self, n):
-        self._bit = BIT(n)
+        self.bit = BIT(n)
 
     def set(self, p, x):
         y = self.get(p)
-        self._bit.add(p, x - y)
+        self.bit.add(p, x - y)
 
     def get(self, p):
-        return self._bit.sum(p, p + 1)
+        return self.bit.sum(p, p + 1)
