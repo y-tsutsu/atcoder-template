@@ -16,8 +16,8 @@ class SegTree:
         p += self._size
         self._d[p] = x
         while p:
-            self._d[p >> 1] = self._op(self._d[p], self._d[p ^ 1])
             p >>= 1
+            self._d[p] = self._op(self._d[p << 1], self._d[p << 1 | 1])
 
     def get(self, p):
         return self._d[p + self._size]

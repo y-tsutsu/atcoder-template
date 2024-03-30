@@ -50,8 +50,6 @@ class SegRollingHash:
                 return y
             if sy == ey:
                 return x
-            if sx > sy:
-                vx0, vx1, sx, ex, vy0, vy1, sy, ey = vy0, vy1, sy, ey, vx0, vx1, sx, ex
             if ex == sy:
                 return [(vx0 * self._pow[ey - sy] + vy0) % self._mod,
                         (vy1 * self._pow[ex - sx] + vx1) % self._mod,
