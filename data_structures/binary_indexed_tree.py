@@ -26,7 +26,7 @@ class BITAddRange:
     '''区間加算用BIT'''
 
     def __init__(self, n):
-        self._bit = BIT(n)
+        self._bit = BIT(n + 1)
 
     def add(self, s, e, x):
         '''[s, e)'''

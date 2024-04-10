@@ -52,7 +52,7 @@ class SegTreeAddRange:
     def __init__(self, n, v=None):
         def op(x, y): return x + y
         def e(): return 0
-        self._st = SegTree(op, e, n, v)
+        self._st = SegTree(op, e, n + 1, v)
 
     def add(self, s, e, x):
         '''[s, e)'''
