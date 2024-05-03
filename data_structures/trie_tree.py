@@ -1,3 +1,8 @@
+from sys import setrecursionlimit
+
+setrecursionlimit(10 ** 9)
+
+
 class TrieTree:
     class Node:
         def __init__(self, char='', rank=-1, parent=None):
