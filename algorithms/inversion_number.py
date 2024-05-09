@@ -2,7 +2,7 @@ class BIT:
     pass
 
 
-def compress(a):
+def compress(a, start=0):
     pass
 
 
