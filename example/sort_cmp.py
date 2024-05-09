@@ -19,8 +19,7 @@ def cmp(u, v):
         return -1
     if a * d > c * b:
         return 1
-    else:
-        return 0
+    return 0
 
 
 def example():
