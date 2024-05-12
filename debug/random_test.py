@@ -16,7 +16,7 @@ def make_random_test_in():
     ret = {}
     for val in range(90, 100):
         a, b = inner()
-        ret[val] = a, b
+        ret[val] = a, b  # TODO
         with open(f'in_{val}.txt', 'w') as f:
             write_one(f, a)
             write_one(f, b)
