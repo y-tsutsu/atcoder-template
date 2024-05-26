@@ -45,6 +45,23 @@ def lis(a):
     return max(dp)
 
 
+def lis_segtree(a):
+    '''最長増加部分列（SegTree ver.）'''
+    class SegTree:
+        pass
+
+    def op(x, y): return max(x, y)
+    def e(): return 0
+    MAX = max(a) + 1
+    st = SegTree(op, e, MAX)
+    ret = -1
+    for x in a:
+        v = st.prod(0, x) + 1
+        ret = max(ret, v)
+        st.update(x, v, lambda x, y: max(x, y))
+    return ret
+
+
 def count_sum_num(value, count, min_, max_):
     '''整数をcount個まで選んで総和がvalue以下になる場合の数（使える数字はmin_～max_）
     dp[i][j]: 整数をi個選んでjをつくる場合の数'''
