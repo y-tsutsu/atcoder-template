@@ -25,6 +25,8 @@ def recurboostmemo(func=None, stack=[], memo={}, args_list=[]):
                 if not isinstance(to, GeneratorType):
                     stack.pop()
                 args_list.pop()
+                if not stack and not args_list:
+                    return v
                 to = stack[-1].send(v)
                 continue
             if isinstance(to, GeneratorType):
