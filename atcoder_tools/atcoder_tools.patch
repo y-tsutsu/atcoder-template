@@ -1,13 +1,13 @@
 diff --git a/language.py b/language.py
-index 6e78765..c68d1f5 100644
+index 331c572..c632a02 100644
 --- a/language.py
 +++ b/language.py
-@@ -123,7 +123,7 @@ PYTHON = Language(
-     name="python",
+@@ -124,7 +124,7 @@ PYTHON = Language(
      display_name="Python",
      extension="py",
--    submission_lang_pattern=re.compile(".*Python \\(3.*|.*Python \\(CPython 3.*"),
-+    submission_lang_pattern=re.compile(".*Python \\(PyPy 3.*"),
+     submission_lang_pattern=re.compile(
+-        ".*Python \\(3.*|.*Python \\(CPython 3.*"),
++        ".*Python \\(PyPy 3.*"),
      default_code_generator=python.main,
      default_template_path=get_default_template_path('py'),
      compile_command="python3 -mpy_compile {filename}.py",
