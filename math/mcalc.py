@@ -74,16 +74,20 @@ def maccumulate(a, mod):
     return ret
 
 
+def recurboost(func=None, stack=[]):
+    pass
+
+
+@recurboost
 def mgeosum(a, r, n, mod):
     '''等比数列の和のMOD版（a:初項 r:公比 n:項数）'''
     if n == 1:
-        return a % mod
-    x = sum(a, r, n // 2, mod)
+        yield a % mod
+    x = yield mgeosum(a, r, n // 2, mod)
     ret = (x + pow(r, n // 2, mod) * x) % mod
     if n % 2 == 1:
-        ret += pow(r, n - 1, mod)
-        ret %= mod
-    return ret
+        ret = (a + r * ret) % mod
+    yield ret
 
 
 def mlcm(a, mod):
