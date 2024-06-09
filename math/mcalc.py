@@ -90,6 +90,22 @@ def mgeosum(a, r, n, mod):
     yield ret
 
 
+def recurboostmemo(func=None, stack=[], memo={}, args_list=[]):
+    pass
+
+
+@recurboostmemo
+def mgeosummemo(a, r, n, mod):
+    '''等比数列の和のMODメモ化再帰版（a:初項 r:公比 n:項数）'''
+    if n == 1:
+        yield a % mod
+    u, v = n // 2, (n + 1) // 2
+    x = yield mgeosummemo(a, r, u, mod)
+    y = yield mgeosummemo(a, r, v, mod)
+    y *= pow(r, u, mod)
+    yield (x + y) % mod
+
+
 def mlcm(a, mod):
     '''最小公倍数のMOD版'''
     def prime_factorize(x):
