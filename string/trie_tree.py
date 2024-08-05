@@ -77,7 +77,7 @@ class TrieTree:
         return self.common_prefix(text, parent.children[c], pos + 1)
 
 
-def main():
+def example():
     tr = TrieTree()
     tr.insert('abcd')
     tr.insert('abcc')
@@ -180,4 +180,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    example()

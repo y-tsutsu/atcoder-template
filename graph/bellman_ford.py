@@ -54,7 +54,7 @@ def bellman_ford(n, d, abc, reachable=None):
     return ret
 
 
-def main():
+def example():
     n = 23  # nは頂点数
     m = 42  # mは辺数
     abc = [[0, 1, 2] for _ in range(m)]  # aからbへの距離cの辺数がm
@@ -77,4 +77,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    example()

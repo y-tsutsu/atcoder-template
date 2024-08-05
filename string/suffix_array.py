@@ -49,7 +49,7 @@ def manber_myers(s, conv=ord):
     return result
 
 
-def main():
+def example():
     s = 'missisippi'
     p = manber_myers(s)
     q = [s[i:] for i in p]
@@ -57,4 +57,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    example()
