@@ -8,7 +8,7 @@ class SortedSet:
 
     def __init__(self, a=[]):
         a = list(a)
-        n = self._size = len(a)
+        n = len(a)
         if any(a[i] > a[i + 1] for i in range(n - 1)):
             a.sort()
         if any(a[i] >= a[i + 1] for i in range(n - 1)):
@@ -16,8 +16,9 @@ class SortedSet:
             for x in b:
                 if not a or a[-1] != x:
                     a.append(x)
-        bucket_size = int(math.ceil(math.sqrt(n / self.BUCKET_RATIO)))
-        self._a = [a[n * i // bucket_size: n * (i + 1) // bucket_size] for i in range(bucket_size)]
+        n = self._size = len(a)
+        num_bucket = int(math.ceil(math.sqrt(n / self.BUCKET_RATIO)))
+        self._a = [a[n * i // num_bucket: n * (i + 1) // num_bucket] for i in range(num_bucket)]
 
     def __iter__(self):
         for i in self._a:
