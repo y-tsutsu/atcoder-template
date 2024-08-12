@@ -6,13 +6,13 @@ def tsp(n, cost, s=0):
     INF = maxsize
     dp = [[INF for _ in range(n)] for _ in range(1 << n)]
     dp[0][s] = 0
-    for s in range(1 << n):
+    for b in range(1 << n):
         for i in range(n):
-            if dp[s][i] == INF:
+            if dp[b][i] == INF:
                 continue
             for ni in range(n):
-                if s >> ni & 1 == 1:
+                if b >> ni & 1 == 1:
                     continue
-                ns = s | 1 << ni
-                dp[ns][ni] = min(dp[ns][ni], dp[s][i] + cost[i][ni])
+                nb = b | 1 << ni
+                dp[nb][ni] = min(dp[nb][ni], dp[b][i] + cost[i][ni])
     return dp
