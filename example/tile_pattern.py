@@ -8,7 +8,7 @@ def acm2dim_helper(a):
     pass
 
 
-def tile(a, b, c, d, h, w, p):
+def tile(si, sj, ei, ej, h, w, p):
     acm = acm2dim_helper(p)
 
     def inner(i, j):
@@ -20,4 +20,4 @@ def tile(a, b, c, d, h, w, p):
         ret += acm(0, 0, mh, mw)
         return ret
 
-    return inner(c, d) - inner(a, d) - inner(c, b) + inner(a, b)
+    return inner(ei, ej) - inner(si, ej) - inner(ei, sj) + inner(si, sj)
