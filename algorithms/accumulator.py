@@ -41,8 +41,8 @@ def accumulate3dim(a):
 
 def acm3dim_helper(a):
     acm = accumulate3dim(a)
-    def helper(si, sj, sk, ei, ej, ek): return (acm[ei][ej][ek] - acm[si][ej][ek] - acm[ei][sj][ek] + acm[si][sj][ek]
-                                                - (acm[ei][ej][sk] - acm[si][ej][sk] - acm[ei][sj][sk] + acm[si][sj][sk]))
+    def helper(si, sj, sk, ei, ej, ek): return ((acm[ei][ej][ek] - acm[ei][sj][ek] - acm[ei][ej][sk] + acm[ei][sj][sk]) -
+                                                (acm[si][ej][ek] - acm[si][sj][ek] - acm[si][ej][sk] + acm[si][sj][sk]))
     return helper
 
 
