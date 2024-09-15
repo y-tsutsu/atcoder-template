@@ -64,9 +64,7 @@ class SegTreeAddRange:
 
 
 def example():
-    # 二項演算（二つの値からどう計算するか．指定区間の最大値を求めたい場合はmaxをとるなど．）
     def op(x, y): return max(x, y)
-    # 単位元（加算する場合は0，掛け合わせる場合は1など）
     def e(): return 0
     st = SegTree(op, e, 100)
     st.set(10, 42)
