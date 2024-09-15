@@ -9,7 +9,7 @@ class LazySegTree():
         self._log = (n - 1).bit_length()
         self._size = 1 << (n - 1).bit_length()
         self._d = [self._e()] * (self._size << 1)
-        self._lazy = [identity] * (self._size << 1)
+        self._lazy = [identity()] * (self._size << 1)
         self._mapping = mapping
         self._composition = composition
         self._id = identity
@@ -30,7 +30,7 @@ class LazySegTree():
     def _push(self, i):
         self._all_apply(i << 1, self._lazy[i])
         self._all_apply(i << 1 | 1, self._lazy[i])
-        self._lazy[i] = self._id
+        self._lazy[i] = self._id()
 
     def set(self, p, x):
         p += self._size
@@ -100,7 +100,7 @@ class LazySegTree():
             s >>= 1
             e >>= 1
         s, e = l2, r2
-        for i in range(1, self._log+1):
+        for i in range(1, self._log + 1):
             if ((s >> i) << i) != s:
                 self._update(s >> i)
             if ((e >> i) << i) != e:
@@ -144,7 +144,7 @@ class LazySegTree():
             if not g(self._op(self._d[r], sm)):
                 while r < self._size:
                     self._push(r)
-                    r = (2*r+1)
+                    r = (2 * r + 1)
                     if g(self._op(self._d[r], sm)):
                         sm = self._op(self._d[r], sm)
                         r -= 1
@@ -155,36 +155,137 @@ class LazySegTree():
         return 0
 
 
-def example():
-    '''区間和を取るサンプル'''
-    def op(x, y):
-        vx, lx = x
-        vy, ly = y
-        return vx + vy, lx + ly
-
-    def e():
-        return (0, 0)
-
-    def mapping(f, x):
-        vx, lx = x
-        return vx + lx * f, lx
-
-    def composition(f, g):
-        return f + g
-
-    _id = 0
-
-    st = LazySegTree(op, e, 100, mapping, composition, _id,
-                     v=[(0, 1) for _ in range(100)])  # 初期値は長さを1にしたものが必須．e()の値ではダメ．
-    print(st.prod(0, 100)[0])
+def example_raq_min():
+    '''区間加算・区間最小値取得'''
+    from sys import maxsize
+    INF = maxsize
+    def op(x, y): return min(x, y)
+    def e(): return INF
+    def mapping(f, x): return f + x
+    def composition(f, g): return f + g
+    def id_(): return 0
+    n = 100
+    st = LazySegTree(op, e, n, mapping, composition, id_, [0 for _ in range(n)])
     st.apply(0, 10, 1)
     st.apply(5, 15, 2)
+    print(st.prod(0, 100))
+    print(st.prod(0, 5))
+    print(st.prod(0, 10))
+    print(st.prod(5, 10))
+    print(st.prod(10, 15))
+    print(st.prod(15, 100))
+
+
+def example_raq_max():
+    '''区間加算・区間最大値取得'''
+    from sys import maxsize
+    INF = maxsize
+    def op(x, y): return max(x, y)
+    def e(): return -INF
+    def mapping(f, x): return f + x
+    def composition(f, g): return f + g
+    def id_(): return 0
+    n = 100
+    st = LazySegTree(op, e, n, mapping, composition, id_, [0 for _ in range(n)])
+    st.apply(0, 10, 1)
+    st.apply(5, 15, 2)
+    print(st.prod(0, 100))
+    print(st.prod(0, 5))
+    print(st.prod(0, 10))
+    print(st.prod(5, 10))
+    print(st.prod(10, 15))
+    print(st.prod(15, 100))
+
+
+def example_raq_sum():
+    '''区間加算・区間和取得'''
+    def op(x, y): return x[0] + y[0], x[1] + y[1]
+    def e(): return (0, 0)
+    def mapping(f, x): return x[0] + x[1] * f, x[1]
+    def composition(f, g): return f + g
+    def id_(): return 0
+    n = 100
+    st = LazySegTree(op, e, n, mapping, composition, id_, [(0, 1) for _ in range(n)])
+    st.apply(0, 10, 1)
+    st.apply(5, 15, 2)
+    print(st.prod(0, 100)[0])
     print(st.prod(0, 5)[0])
+    print(st.prod(0, 10)[0])
     print(st.prod(5, 10)[0])
     print(st.prod(10, 15)[0])
-    print(st.prod(0, 15)[0])
+    print(st.prod(15, 100)[0])
+
+
+def example_ruq_min():
+    '''区間変更・区間最小値取得'''
+    from sys import maxsize
+    INF = maxsize
+    ID = INF
+    def op(x, y): return min(x, y)
+    def e(): return INF
+    def mapping(f, x): return x if f == ID else f
+    def composition(f, g): return g if f == ID else f
+    def id_(): return ID
+    n = 100
+    st = LazySegTree(op, e, n, mapping, composition, id_, [0 for _ in range(n)])
+    st.apply(0, 10, 1)
+    st.apply(5, 15, 2)
+    print(st.prod(0, 100))
+    print(st.prod(0, 5))
+    print(st.prod(0, 10))
+    print(st.prod(5, 10))
+    print(st.prod(10, 15))
+    print(st.prod(15, 100))
+
+
+def example_ruq_max():
+    '''区間変更・区間最大値取得'''
+    from sys import maxsize
+    INF = maxsize
+    ID = INF
+    def op(x, y): return max(x, y)
+    def e(): return -INF
+    def mapping(f, x): return x if f == ID else f
+    def composition(f, g): return g if f == ID else f
+    def id_(): return ID
+    n = 100
+    st = LazySegTree(op, e, n, mapping, composition, id_, [0 for _ in range(n)])
+    st.apply(0, 10, 1)
+    st.apply(5, 15, 2)
+    print(st.prod(0, 100))
+    print(st.prod(0, 5))
+    print(st.prod(0, 10))
+    print(st.prod(5, 10))
+    print(st.prod(10, 15))
+    print(st.prod(15, 100))
+
+
+def example_ruq_sum():
+    '''区間変更・区間和取得'''
+    from sys import maxsize
+    INF = maxsize
+    ID = INF
+    def op(x, y): return x[0] + y[0], x[1] + y[1]
+    def e(): return (0, 0)
+    def mapping(f, x): return x if f == ID else (f * x[1], x[1])
+    def composition(f, g): return g if f == ID else f
+    def id_(): return ID
+    n = 100
+    st = LazySegTree(op, e, n, mapping, composition, id_, [(0, 1) for _ in range(n)])
+    st.apply(0, 10, 1)
+    st.apply(5, 15, 2)
     print(st.prod(0, 100)[0])
+    print(st.prod(0, 5)[0])
+    print(st.prod(0, 10)[0])
+    print(st.prod(5, 10)[0])
+    print(st.prod(10, 15)[0])
+    print(st.prod(15, 100)[0])
 
 
 if __name__ == '__main__':
-    example()
+    example_raq_min()
+    example_raq_max()
+    example_raq_sum()
+    example_ruq_min()
+    example_ruq_max()
+    example_ruq_sum()
