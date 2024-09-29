@@ -1,8 +1,9 @@
 class WeightedUnionFind:
     def __init__(self, n):
-        self._par = [i for i in range(n + 1)]
-        self._rank = [0 for _ in range(n + 1)]
-        self._weight = [0 for _ in range(n + 1)]
+        self._n = n
+        self._par = [i for i in range(n)]
+        self._rank = [0 for _ in range(n)]
+        self._weight = [0 for _ in range(n)]
 
     def find(self, i):
         if self._par[i] == i:
@@ -29,3 +30,9 @@ class WeightedUnionFind:
 
     def diff(self, i, j):
         return self._weight[i] - self._weight[j]
+
+    def groups(self):
+        result = [[] for _ in range(self._n)]
+        for i in range(self._n):
+            result[self.find(i)].append(i)
+        return [x for x in result if x]
