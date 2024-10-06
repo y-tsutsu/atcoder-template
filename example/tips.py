@@ -1,4 +1,4 @@
-from itertools import pairwise
+from itertools import pairwise, zip_longest
 from math import dist, isqrt
 from statistics import median, mode, multimode
 from sys import set_int_max_str_digits, setrecursionlimit
@@ -63,3 +63,10 @@ print(tot)
 '''ユークリッド距離'''
 d = dist((1, 2), (3, 6))
 print(d)
+
+
+'''短いほうをパディングしてzip'''
+a = [1, 2, 3, 4, 5]
+b = [6, 7, 8, 9]
+for u, v in zip_longest(a, b, fillvalue=0):
+    print(u, v)
