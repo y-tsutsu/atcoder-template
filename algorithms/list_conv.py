@@ -7,11 +7,21 @@ def scatter(a, n):
 
 
 def rrotate(p):
-    return [x for x in zip(*p[::-1])]
+    h, w = len(p), len(p[0])
+    ret = [['' for _ in range(h)] for _ in range(w)]
+    for i in range(h):
+        for j in range(w):
+            ret[j][h - i - 1] = p[i][j]
+    return ret
 
 
 def lrotate(p):
-    return [x for x in zip(*[y[::-1] for y in p])]
+    h, w = len(p), len(p[0])
+    ret = [['' for _ in range(h)] for _ in range(w)]
+    for i in range(h):
+        for j in range(w):
+            ret[w - j - 1][i] = p[i][j]
+    return ret
 
 
 def transpose(p):
