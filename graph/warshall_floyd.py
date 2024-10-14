@@ -23,6 +23,16 @@ def is_disconnected_vertex(d, i, j):
     return True if d[i][j] >= INF // 2 else False
 
 
+def update_new_edge(n, d, a, b, c):
+    '''辺の追加更新'''
+    d[a][b] = min(d[a][b], c)
+    d[b][a] = min(d[b][a], c)
+    for i in range(n):
+        for j in range(n):
+            d[i][j] = min(d[i][j], d[i][a] + d[a][b] + d[b][j])
+            d[i][j] = min(d[i][j], d[i][b] + d[b][a] + d[a][j])
+
+
 def example():
     n = 23  # nは頂点数
     m = 42  # mは辺数
