@@ -67,8 +67,8 @@ class MComb:
 
 
 def maccumulate(a, mod):
-    ret = a[:]
-    for i in range(len(a) - 1):
+    ret = [0] + a
+    for i in range(len(a)):
         ret[i + 1] += ret[i]
         ret[i + 1] %= mod
     return ret
