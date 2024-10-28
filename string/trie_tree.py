@@ -1,6 +1,5 @@
-from sys import setrecursionlimit
-
-setrecursionlimit(10 ** 9)
+def recurboost(func=None, stack=[]):
+    pass
 
 
 class TrieTree:
@@ -30,19 +29,21 @@ class TrieTree:
     def __init__(self):
         self._root = TrieTree.Node()
 
+    @recurboost
     def insert(self, text, parent=None, pos=0):
         if parent is None:
             parent = self._root
         if pos == len(text):
             parent.value = text
             parent.count += 1
-            return
+            yield
         parent.count += 1
         c = text[pos]
         if c not in parent.children:
             parent.children[c] = TrieTree.Node(char=c, rank=pos, parent=parent)
         node = parent.children[c]
-        self.insert(text, node, pos + 1)
+        yield self.insert(text, node, pos + 1)
+        yield
 
     def search(self, text, parent=None, pos=0):
         return self._inner_search(text, parent, pos, lambda p: p.is_terminate())
@@ -53,28 +54,32 @@ class TrieTree:
     def common_prefix_with(self, text, parent=None, pos=0):
         return self._inner_search(text, parent, pos, lambda p: (p.is_terminate() and p.count >= 2) or (not p.is_terminate() and p.count >= 2))
 
+    @recurboost
     def _inner_search(self, text, parent, pos, result_funk):
         if parent is None:
             parent = self._root
         if pos == len(text):
-            return result_funk(parent)
+            yield result_funk(parent)
         c = text[pos]
         if c not in parent.children:
-            return False
-        return self._inner_search(text, parent.children[c], pos + 1, result_funk)
+            yield False
+        ret = yield self._inner_search(text, parent.children[c], pos + 1, result_funk)
+        yield ret
 
+    @recurboost
     def common_prefix(self, text, parent=None, pos=0):
         if parent is None:
             parent = self._root
         if pos == len(text):
-            return text[:parent.rank + 1]
+            yield text[:parent.rank + 1]
         c = text[pos]
         if c not in parent.children:
-            return text[:parent.rank + 1]
+            yield text[:parent.rank + 1]
         child = parent.children[c]
         if child.count == 1:
-            return text[:parent.rank + 1]
-        return self.common_prefix(text, parent.children[c], pos + 1)
+            yield text[:parent.rank + 1]
+        ret = yield self.common_prefix(text, parent.children[c], pos + 1)
+        yield ret
 
 
 def example():
