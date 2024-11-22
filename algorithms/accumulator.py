@@ -1,4 +1,4 @@
-from itertools import accumulate, product
+from itertools import accumulate
 
 
 def acm_helper(a):
@@ -10,12 +10,15 @@ def acm_helper(a):
 def accumulate2dim(a):
     h, w = len(a), len(a[0])
     p = [[0 for _ in range(w + 1)] for _ in range(h + 1)]
-    for i, j in product(range(h), range(w)):
-        p[i + 1][j + 1] = a[i][j]
-    for i, j in product(range(h + 1), range(w)):
-        p[i][j + 1] += p[i][j]
-    for i, j in product(range(h), range(w + 1)):
-        p[i + 1][j] += p[i][j]
+    for i in range(h):
+        for j in range(w):
+            p[i + 1][j + 1] = a[i][j]
+    for i in range(h + 1):
+        for j in range(w):
+            p[i][j + 1] += p[i][j]
+    for i in range(h):
+        for j in range(w + 1):
+            p[i + 1][j] += p[i][j]
     return p
 
 
@@ -28,14 +31,22 @@ def acm2dim_helper(a):
 def accumulate3dim(a):
     d, h, w = len(a), len(a[0]), len(a[0][0])
     p = [[[0 for _ in range(w + 1)] for _ in range(h + 1)] for _ in range(d + 1)]
-    for i, j, k in product(range(d), range(h), range(w)):
-        p[i + 1][j + 1][k + 1] = a[i][j][k]
-    for i, j, k in product(range(d + 1), range(h + 1), range(w)):
-        p[i][j][k + 1] += p[i][j][k]
-    for i, j, k in product(range(d + 1), range(h), range(w + 1)):
-        p[i][j + 1][k] += p[i][j][k]
-    for i, j, k in product(range(d), range(h + 1), range(w + 1)):
-        p[i + 1][j][k] += p[i][j][k]
+    for i in range(d):
+        for j in range(h):
+            for k in range(w):
+                p[i + 1][j + 1][k + 1] = a[i][j][k]
+    for i in range(d + 1):
+        for j in range(h + 1):
+            for k in range(w):
+                p[i][j][k + 1] += p[i][j][k]
+    for i in range(d + 1):
+        for j in range(h):
+            for k in range(w + 1):
+                p[i][j + 1][k] += p[i][j][k]
+    for i in range(d):
+        for j in range(h + 1):
+            for k in range(w + 1):
+                p[i + 1][j][k] += p[i][j][k]
     return p
 
 
