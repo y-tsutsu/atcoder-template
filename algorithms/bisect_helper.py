@@ -49,3 +49,23 @@ def range_inclusive_count(a, lo, hi):
 def range_exclusive_count(a, lo, hi):
     '''[lo, hi)'''
     return bisect_left(a, hi) - bisect_left(a, lo)
+
+
+def kth_lt(a, x, k):
+    i = bisect_left(a, x)
+    return None if (i - 1 - k) < 0 else a[i - 1 - k]
+
+
+def kth_le(a, x, k):
+    i = bisect_right(a, x)
+    return None if (i - 1 - k) < 0 else a[i - 1 - k]
+
+
+def kth_gt(a, x, k):
+    i = bisect_right(a, x)
+    return None if (i + k) >= len(a) else a[i + k]
+
+
+def kth_ge(a, x, k):
+    i = bisect_left(a, x)
+    return None if (i + k) >= len(a) else a[i + k]
