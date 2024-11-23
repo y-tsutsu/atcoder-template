@@ -1,10 +1,10 @@
 from sys import maxsize
 
-INF = maxsize // 4  # ワーシャルフロイドでmaxsizeを使うと計算が遅くなるので注意
+INF = maxsize // 4
 
 
 def warshall_floyd(n, d):
-    for k in range(n):  # kは経由する頂点
+    for k in range(n):
         for i in range(n):
             for j in range(n):
                 d[i][j] = min(d[i][j], d[i][k] + d[k][j])
