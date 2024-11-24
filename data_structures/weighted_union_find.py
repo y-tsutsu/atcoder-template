@@ -29,6 +29,8 @@ class WeightedUnionFind:
         return self.find(i) == self.find(j)
 
     def diff(self, i, j):
+        if not self.same(i, j):
+            return None
         return self._weight[i] - self._weight[j]
 
     def groups(self):
