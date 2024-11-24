@@ -53,10 +53,14 @@ def manhattan_mst(n, xs, ys):
     return ret
 
 
+def rotate_45_deg(xys):
+    return [(x + y, x - y) for x, y in xys]
+
+
 def manhattan_max(xys):
     '''全座標の組合せの中でマンハッタン距離の最大値を算出'''
     # https://fukubutyo.web.fc2.com/Manhattan.html
-    p = [(x + y, x - y) for x, y in xys]  # 45度回転のルート2倍の座標
+    p = rotate_45_deg(xys)  # 45度回転のルート2倍の座標
     xs = [x for x, _ in p]
     ys = [y for _, y in p]
     ret = max(max(xs) - min(xs), max(ys) - min(ys))
