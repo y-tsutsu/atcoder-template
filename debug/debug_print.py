@@ -2,14 +2,13 @@ from ast import Call, parse, unparse, walk
 from inspect import currentframe, getsourcelines
 
 
-def dprint(*args):
-    def _inner(value):
-        type0, type1 = (list, tuple), (list, tuple, str)
-        if isinstance(value, type0) and value and isinstance(value[0], type0) and value[0] and isinstance(value[0][0], type1):
-            return '\n' + '\n'.join(['\n'.join([' '.join([str(z) for z in y]) for y in x]) + '\n' for x in value]).rstrip('\n')
-        if isinstance(value, type0) and value and isinstance(value[0], type1):
-            return '\n' + '\n'.join([' '.join([str(y) for y in x]) for x in value])
-        return str(value)
+def dprint(*args, pretty=True):
+    def _inner(v):
+        def _format_3d(v): return '\n' + '\n'.join(['\n'.join([' '.join([str(z) for z in y]) for y in x]) + '\n' for x in v]).rstrip('\n')
+        def _format_2d(v): return '\n' + '\n'.join([' '.join([str(y) for y in x]) for x in v])
+        def _dim(v): return (1 + _dim(v[0]) if v else 1) if isinstance(v, (list, tuple)) else 1 if isinstance(v, str) else 0
+        dim = _dim(v) if pretty else -1
+        return _format_3d(v) if dim == 3 else _format_2d(v) if dim == 2 else str(v)
     frame = currentframe().f_back
     source_lines, start_line = getsourcelines(frame)
     tree = parse(source_lines[frame.f_lineno - max(1, start_line)].strip())
