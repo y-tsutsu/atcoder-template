@@ -5,9 +5,9 @@ from inspect import currentframe, getsourcelines
 def dprint(*args):
     def _inner(value):
         type0, type1 = (list, tuple), (list, tuple, str)
-        if isinstance(value, type0) and isinstance(value[0], type0) and isinstance(value[0][0], type1):
+        if isinstance(value, type0) and value and isinstance(value[0], type0) and value[0] and isinstance(value[0][0], type1):
             return '\n' + '\n'.join(['\n'.join([' '.join([str(z) for z in y]) for y in x]) + '\n' for x in value]).rstrip('\n')
-        if isinstance(value, type0) and isinstance(value[0], type1):
+        if isinstance(value, type0) and value and isinstance(value[0], type1):
             return '\n' + '\n'.join([' '.join([str(y) for y in x]) for x in value])
         return str(value)
     frame = currentframe().f_back
