@@ -15,3 +15,19 @@ def dprint(*args, pretty=True):
     call_node = next(node for node in walk(tree) if isinstance(node, Call) and node.func.id == 'dprint')
     arg_names = [unparse(arg) for arg in call_node.args]
     print(', '.join([f'\033[4;35m{name}:\033[0m {_inner(value)}' for name, value in zip(arg_names, args)]))
+
+
+def example():
+    a, b, c = 42, True, 'foo'
+    dprint(a, b, c)
+    p = [[[1, 2, 3], [4, 5, 6], [7, 8, 9]], [[10, 20, 30], [40, 50, 60], [70, 80, 90]]]
+    dprint(p)
+    q = [('one', 1), ('two', 2), ('three', 3)]
+    dprint(q)
+    dprint(q, pretty=False)
+    s = ['..#', '#.#', '.#.']
+    dprint(s)
+
+
+if __name__ == '__main__':
+    example()
