@@ -12,7 +12,7 @@ def dprint(*args, pretty=True):
     def _inner(v):
         def _format_3d(v): return '\n' + '\n'.join(['\n'.join([' '.join([str(z) for z in y]) for y in x]) + '\n' for x in v]).rstrip('\n')
         def _format_2d(v): return '\n' + '\n'.join([' '.join([str(y) for y in x]) for x in v])
-        def _dim(v): return (1 + _dim(v[0]) if v else 1) if isinstance(v, (list, tuple)) else 1 if isinstance(v, str) else 0
+        def _dim(v): return (1 + min(_dim(x) for x in v) if v else 1) if isinstance(v, (list, tuple)) else 1 if isinstance(v, str) else 0
         dim = _dim(v) if pretty else -1
         return _format_3d(v) if dim == 3 else _format_2d(v) if dim == 2 else str(v)
     frame = currentframe().f_back
