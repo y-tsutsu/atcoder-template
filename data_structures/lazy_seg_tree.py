@@ -123,7 +123,7 @@ class LazySegTree():
                     if g(self._op(sm, self._d[s])):
                         sm = self._op(sm, self._d[s])
                         s += 1
-                return s-self._size
+                return s - self._size
             sm = self._op(sm, self._d[s])
             s += 1
             if (s & -s) == s:
@@ -135,7 +135,7 @@ class LazySegTree():
             return 0
         r += self._size
         for i in range(self._log, 0, -1):
-            self._push((r-1) >> i)
+            self._push((r - 1) >> i)
         sm = self._e
         while True:
             r -= 1
@@ -148,7 +148,7 @@ class LazySegTree():
                     if g(self._op(self._d[r], sm)):
                         sm = self._op(self._d[r], sm)
                         r -= 1
-                return r+1-self._size
+                return r + 1 - self._size
             sm = self._op(self._d[r], sm)
             if (r & -r) == r:
                 break
