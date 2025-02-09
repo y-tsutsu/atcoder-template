@@ -47,3 +47,42 @@ class BITHelper:
 
     def get(self, p):
         return self.bit.sum(p, p + 1)
+
+
+def bisect_ng_ok(s, e, is_ok):
+    pass
+
+
+class BITSortedMultiset:
+    def __init__(self, max_):
+        self._max = max_
+        self._size = 0
+        self._bit = BIT(self._max + 1)
+
+    def __len__(self):
+        return self._size
+
+    def __contains__(self, x):
+        return self._bit.sum(x, x + 1) != 0
+
+    def __getitem__(self, i):
+        def f(i):
+            def _f(x):
+                tot = self._bit.sum(0, x + 1)
+                return tot >= i + 1
+            return _f
+        if self._size <= i:
+            return None
+        return bisect_ng_ok(0, self._max, f(i))
+
+    def add(self, x):
+        assert x <= self._max
+        self._bit.add(x, 1)
+        self._size += 1
+
+    def discard(self, x):
+        assert x <= self._max
+        if self._bit.sum(x, x + 1) == 0:
+            return
+        self._bit.add(x, -1)
+        self._size -= 1
