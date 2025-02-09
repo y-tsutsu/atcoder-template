@@ -21,6 +21,13 @@ class BIT:
             e -= e & -e
         return s
 
+    def get(self, p):
+        return self.sum(p, p + 1)
+
+    def set(self, p, x):
+        y = self.get(p)
+        self.add(p, x - y)
+
 
 class BITAddRange:
     '''区間加算用BIT'''
@@ -37,18 +44,6 @@ class BITAddRange:
         return self._bit.sum(0, p + 1)
 
 
-class BITHelper:
-    def __init__(self, n):
-        self.bit = BIT(n)
-
-    def set(self, p, x):
-        y = self.get(p)
-        self.bit.add(p, x - y)
-
-    def get(self, p):
-        return self.bit.sum(p, p + 1)
-
-
 def bisect_ng_ok(s, e, is_ok):
     pass
 
@@ -62,8 +57,15 @@ class BITSortedMultiset:
     def __len__(self):
         return self._size
 
+    def __str__(self):
+        p = []
+        for i in range(self._max + 1):
+            p += [i for _ in range(self._bit.get(i))]
+        return str(p)
+
     def __contains__(self, x):
-        return self._bit.sum(x, x + 1) != 0
+        assert x <= self._max
+        return self._bit.get(x) != 0
 
     def __getitem__(self, i):
         def f(i):
@@ -82,7 +84,7 @@ class BITSortedMultiset:
 
     def discard(self, x):
         assert x <= self._max
-        if self._bit.sum(x, x + 1) == 0:
+        if self._bit.get(x) == 0:
             return
         self._bit.add(x, -1)
         self._size -= 1
