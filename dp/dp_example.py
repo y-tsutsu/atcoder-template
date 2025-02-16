@@ -41,7 +41,7 @@ def lis(a):
         if j == len(d):
             d.append(a[i])
         else:
-            d[j] = min(d[j], a[i])
+            d[j] = a[i]
     return max(dp)
 
 
