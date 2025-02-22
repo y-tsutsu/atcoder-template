@@ -9,11 +9,17 @@ def divisors(n):
     return ld + ud[::-1]
 
 
-def div_counts(n):
+def divisors_table(n):
+    ret = [[] for _ in range(n + 1)]
+    for i in range(1, n + 1):
+        for j in range(i, n + 1, i):
+            ret[j].append(i)
+    return ret
+
+
+def divisors_counts(n):
     ret = [0 for _ in range(n + 1)]
     for i in range(1, n + 1):
-        p = i
-        while p <= n:
-            ret[p] += 1
-            p += i
+        for j in range(i, n + 1, i):
+            ret[j] += 1
     return ret
