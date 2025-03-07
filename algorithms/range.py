@@ -27,6 +27,9 @@ class Range():
             return -1
         return abs(max(self.s, other.s) - min(self.e, other.e))
 
+    def contained_in(self, other):
+        return other.s <= self.s and self.e <= other.e
+
 
 def example():
     r05 = Range(0, 5)
