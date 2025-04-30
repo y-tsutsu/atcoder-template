@@ -2,7 +2,7 @@ from random import randint
 
 
 class RollingHash:
-    def __init__(self, s, mod=998244353, base=randint(100, 500)):
+    def __init__(self, s, mod=952149973289264689, base=randint(100, 500)):
         self._str = s
         self._mod = mod
         self._base = base
@@ -30,7 +30,7 @@ class SegTree:
 
 
 class SegRollingHash:
-    def __init__(self, s, mod=998244353, base=randint(100, 500)):
+    def __init__(self, s, mod=952149973289264689, base=randint(100, 500)):
         self._mod = mod
         self._n = len(s)
         self._pow = [1]
