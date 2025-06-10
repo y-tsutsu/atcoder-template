@@ -1,9 +1,13 @@
 def ptoi(i, j, w): return i * w + j
-def itop(i, w): return i // w, i % w
+def itop(v, w): return v // w, v % w
 
 
 def ptoi3d(i, j, k, h, w): return i * h * w + j * w + k
-def itop3d(i, h, w): return i // (h * w), (i % (h * w)) // w, (i % (h * w)) % w
+def itop3d(v, h, w): return v // (h * w), (v % (h * w)) // w, (v % (h * w)) % w
+
+
+def pack(i, j, k, w=12): return i << w * 2 | j << w | k
+def unpack(v, w=12): return v >> w * 2, (v >> w) - ((v >> w * 2) << w), v - ((v >> w) << w)
 
 
 def example():
