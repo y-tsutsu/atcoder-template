@@ -1,9 +1,13 @@
-def chunks(a, n):
-    return [a[i:i + n] for i in range(0, len(a), n)]
+def flatten(p):
+    return [x for inner in p for x in inner]
 
 
-def scatter(a, n):
-    return [a[i::n] for i in range(n)]
+def chunks(p, n):
+    return [p[i:i + n] for i in range(0, len(p), n)]
+
+
+def scatter(p, n):
+    return [p[i::n] for i in range(n)]
 
 
 def rrotate(p):
