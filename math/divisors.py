@@ -1,6 +1,9 @@
+from math import isqrt
+
+
 def divisors(n):
     ld, ud = [], []
-    for i in range(1, int(n ** 0.5) + 1):
+    for i in range(1, isqrt(n) + 1):
         if n % i == 0:
             ld.append(i)
             if i == n // i:

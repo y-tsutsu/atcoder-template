@@ -1,3 +1,6 @@
+from math import isqrt
+
+
 def prime_factorize(n):
     ret = []
     while n % 2 == 0:
@@ -22,7 +25,7 @@ def is_prime(n):
         return True
     if n % 2 == 0:
         return False
-    for i in range(3, int(n ** 0.5) + 1, 2):
+    for i in range(3, isqrt(n) + 1, 2):
         if n % i == 0:
             return False
     return True
@@ -30,7 +33,7 @@ def is_prime(n):
 
 def primes(n):
     a = [0 for _ in range(n + 1)]
-    for i in range(2, int(n ** 0.5) + 1):
+    for i in range(2, isqrt(n) + 1):
         if a[i] != 0:
             continue
         p = i * 2
