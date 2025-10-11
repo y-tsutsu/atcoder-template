@@ -66,6 +66,25 @@ class MComb:
         return self.comb(n + r - 1, r)
 
 
+class MCombPascal:
+    def __init__(self, max_, mod):
+        self._mod = mod
+        self._comb = [[0 for _ in range(max_ + 1)] for _ in range(max_ + 1)]
+        for n in range(max_ + 1):
+            self._comb[n][0] = 1
+            self._comb[n][n] = 1
+            for r in range(1, n):
+                self._comb[n][r] = (self._comb[n - 1][r - 1] + self._comb[n - 1][r]) % mod
+
+    def comb(self, n, r):
+        if r < 0 or r > n:
+            return 0
+        return self._comb[n][r]
+
+    def combr(self, n, r):
+        return self.comb(n + r - 1, r)
+
+
 def maccumulate(a, mod):
     ret = [0] + a
     for i in range(len(a)):
