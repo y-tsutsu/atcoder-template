@@ -50,17 +50,17 @@ class TrieTree:
         ret = yield self.lcp(text, parent.children[c], pos + 1)
         yield ret
 
-    def search(self, text, parent=None, pos=0):
+    def search(self, text):
         '''textが登録済みか？'''
-        return self._inner_search(text, parent, pos, lambda p: p.is_terminate())
+        return self._inner_search(text, None, 0, lambda p: p.is_terminate())
 
-    def prefix_with(self, text, parent=None, pos=0):
+    def prefix_with(self, text):
         '''textが登録された文字列のprefixとして存在するか？'''
-        return self._inner_search(text, parent, pos, lambda _: True)
+        return self._inner_search(text, None, 0, lambda _: True)
 
-    def common_prefix_with(self, text, parent=None, pos=0):
+    def common_prefix_with(self, text):
         '''textが登録された文字列のうち複数の共通prefixとして存在するか？'''
-        return self._inner_search(text, parent, pos, lambda p: p.count >= 2)
+        return self._inner_search(text, None, 0, lambda p: p.count >= 2)
 
     @recurboost
     def _inner_search(self, text, parent, pos, result_funk):
@@ -73,6 +73,14 @@ class TrieTree:
             yield False
         ret = yield self._inner_search(text, parent.children[c], pos + 1, result_funk)
         yield ret
+
+    @recurboost
+    def dfs(self, parent=None, result=[]):
+        if parent is None:
+            parent = self._root
+        for k, node in sorted(parent.children.items()):
+            yield self.dfs(node)
+        yield
 
 
 def example():
@@ -162,7 +170,7 @@ def example():
     print(tr.common_prefix_with('cc'))
     print(tr.common_prefix_with('c'))
     print(tr.common_prefix_with('z'))
-    print(f'## common_prefix: {True} ##')
+    print(f'## lcp: ##')
     print(tr.lcp('abcd') == 'abc')
     print(tr.lcp('abcc') == 'abc')
     print(tr.lcp('abxyz') == 'abxy')
