@@ -1,3 +1,4 @@
+from functools import total_ordering
 from math import cos, gcd, sin
 
 
@@ -52,6 +53,37 @@ class Sfol:
         return f'{self.a} {self.b} {self.c}'
 
 
+@total_ordering
+class SortableVec:
+    def __init__(self, x, y):
+        assert x != 0 or y != 0
+        self.x = x
+        self.y = y
+
+    def __lt__(self, other):
+        q0, q1 = self.get_quadrant(), other.get_quadrant()
+        if q0 != q1:
+            return q0 < q1
+        return self.cross(other) > 0
+
+    def __eq__(self, other):
+        q0, q1 = self.get_quadrant(), other.get_quadrant()
+        if q0 != q1:
+            return False
+        return True if self.cross(other) == 0 else False
+
+    def __str__(self):
+        return f'({self.x}, {self.y})'
+
+    def get_quadrant(self):
+        if self.y > 0 or (self.y == 0 and self.x > 0):
+            return 0
+        return 1
+
+    def cross(self, other):
+        return self.x * other.y - self.y * other.x
+
+
 class Vec:
     def __init__(self, x, y):
         self.x, self.y = x, y
@@ -63,7 +95,7 @@ class Vec:
         return self.__class__(self.x - other.x, self.y - other.y)
 
     def __str__(self):
-        return f'{self.x} {self.y}'
+        return f'({self.x}, {self.y})'
 
     def cross(self, other):
         '''外積'''
