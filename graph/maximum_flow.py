@@ -39,14 +39,14 @@ class Dinic:
         return level[t] is not None
 
     @recurboost
-    def _dfs(self, v, t, f):
+    def _dfs(self, v, t, f, it):
         if v == t:
             yield f
         level = self._level
-        for e in self.it[v]:
+        for e in it[v]:
             w, cap, rev = e
             if cap and level[v] < level[w]:
-                d = yield self._dfs(w, t, min(f, cap))
+                d = yield self._dfs(w, t, min(f, cap), it)
                 if d:
                     e[1] -= d
                     rev[1] += d
@@ -57,9 +57,9 @@ class Dinic:
         flow = 0
         INF = maxsize
         while self._bfs(s, t):
-            *self.it, = map(iter, self._to)
+            *it, = map(iter, self._to)
             f = INF
             while f:
-                f = self._dfs(s, t, INF)
+                f = self._dfs(s, t, INF, it)
                 flow += f
         return flow
