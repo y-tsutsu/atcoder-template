@@ -1,6 +1,6 @@
-def dprint(*args, pretty=True):
+def dprint(*args, pretty=False):
     def _inner(v):
-        def _dim(v): return (1 + min(_dim(x) for x in v) if v else 1) if isinstance(v, (list, tuple)) else 1 if isinstance(v, str) and len(v) > 1 else 0
+        def _dim(v): return (1 + min(_dim(x) for x in v) if v else 1) if isinstance(v, (list, tuple, set)) else 1 if isinstance(v, str) and len(v) > 1 else 0
         def _format_2d(v): return '\n' + '\n'.join([' '.join([str(y) for y in x]) for x in v])
         def _format_3d(v): return '\n' + '\n'.join(['\n'.join([' '.join([str(z) for z in y]) for y in x]) + '\n' for x in v]).rstrip('\n')
         dim = _dim(v) if pretty else -1
@@ -17,16 +17,18 @@ def dprint(*args, pretty=True):
 
 def example():
     a, b, c = 42, True, 'foo'
-    dprint(a, b, c)
+    dprint(a, b, c, pretty=True)
     p = [[[1, 2, 3], [4, 5, 6], [7, 8, 9]], [[10, 20, 30], [40, 50, 60], [70, 80, 90]]]
-    dprint(p)
+    dprint(p, pretty=True)
     q = [('one', 1), ('two', 2), ('three', 3)]
+    dprint(q, pretty=True)
     dprint(q)
-    dprint(q, pretty=False)
     s = ['..#', '#.#', '.#.']
-    dprint(s)
+    dprint(s, pretty=True)
     t = [list(x) for x in s]
-    dprint(t)
+    dprint(t, pretty=True)
+    u = [set(x) for x in s]
+    dprint(u, pretty=True)
 
 
 if __name__ == '__main__':

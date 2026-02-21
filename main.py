@@ -6,9 +6,9 @@ def read(): return next(_tokens)
 def iread(): return int(next(_tokens))
 
 
-def dprint(*args, pretty=True):
+def dprint(*args, pretty=False):
     def _inner(v):
-        def _dim(v): return (1 + min(_dim(x) for x in v) if v else 1) if isinstance(v, (list, tuple)) else 1 if isinstance(v, str) and len(v) > 1 else 0
+        def _dim(v): return (1 + min(_dim(x) for x in v) if v else 1) if isinstance(v, (list, tuple, set)) else 1 if isinstance(v, str) and len(v) > 1 else 0
         def _format_2d(v): return '\n' + '\n'.join([' '.join([str(y) for y in x]) for x in v])
         def _format_3d(v): return '\n' + '\n'.join(['\n'.join([' '.join([str(z) for z in y]) for y in x]) + '\n' for x in v]).rstrip('\n')
         dim = _dim(v) if pretty else -1
