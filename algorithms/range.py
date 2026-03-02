@@ -23,6 +23,6 @@ class Range():
 
     def intersection(self, other): return Range(max(self.s, other.s), min(self.e, other.e)) if self.overlaps(other) else None
 
-    def union(self, other): return Range(min(self.s, other.s), max(self.e, other.e)) if self.overlaps(other) else None
+    def union(self, other): return Range(min(self.s, other.s), max(self.e, other.e)) if self.gap(other) <= 0 else None
 
     def gap(self, other): return abs(max(self.s, other.s) - min(self.e, other.e)) if not self.overlaps(other) else -1
