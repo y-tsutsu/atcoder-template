@@ -139,3 +139,8 @@ def mlcm(a, mod):
         ret *= pow(k, v, mod)
         ret %= mod
     return ret
+
+
+def repunit(n, mod):
+    '''レピュニット数（1111111111）'''
+    return ((pow(10, n, mod * 9) - 1) // 9) % mod
