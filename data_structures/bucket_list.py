@@ -71,6 +71,10 @@ class BucketList:
         raise IndexError
 
     def append(self, x):
+        if self.size == 0:
+            self.a = [[x]]
+            self.size = 1
+            return
         a = self.a[-1]
         return self._insert(a, len(self.a) - 1, len(a), x)
 
@@ -88,6 +92,21 @@ class BucketList:
             for a in self.a:
                 if i < len(a):
                     return a[i]
+                i -= len(a)
+        raise IndexError
+
+    def __setitem__(self, i, x):
+        if i < 0:
+            for a in reversed(self.a):
+                i += len(a)
+                if i >= 0:
+                    a[i] = x
+                    return
+        else:
+            for a in self.a:
+                if i < len(a):
+                    a[i] = x
+                    return
                 i -= len(a)
         raise IndexError
 
