@@ -31,7 +31,7 @@ def mdiv2(n, r, mod):
 
 
 def mcomb(n, r, mod):
-    if r > n:
+    if n < 0 or r < 0 or r > n:
         return 0
     ret = 1
     for i in range(min(r, n - r)):
@@ -42,6 +42,10 @@ def mcomb(n, r, mod):
 
 
 def mcombr(n, r, mod):
+    if n == 0 and r == 0:
+        return 1
+    if n <= 0 or r < 0:
+        return 0
     return mcomb(n + r - 1, r, mod)
 
 
@@ -57,12 +61,16 @@ class MComb:
             self._factinv.append((self._factinv[-1] * inv[-1]) % mod)
 
     def comb(self, n, r):
-        if r < 0 or r > n:
+        if n < 0 or r < 0 or r > n:
             return 0
         r = min(r, n - r)
         return (self._fact[n] * self._factinv[r] * self._factinv[n - r]) % self._mod
 
     def combr(self, n, r):
+        if n == 0 and r == 0:
+            return 1
+        if n <= 0 or r < 0:
+            return 0
         return self.comb(n + r - 1, r)
 
 
@@ -77,11 +85,15 @@ class MCombPascal:
                 self._comb[n][r] = (self._comb[n - 1][r - 1] + self._comb[n - 1][r]) % mod
 
     def comb(self, n, r):
-        if r < 0 or r > n:
+        if n < 0 or r < 0 or r > n:
             return 0
         return self._comb[n][r]
 
     def combr(self, n, r):
+        if n == 0 and r == 0:
+            return 1
+        if n <= 0 or r < 0:
+            return 0
         return self.comb(n + r - 1, r)
 
 

@@ -10,10 +10,16 @@ def perm(n, r):
 
 
 def comb(n, r):
+    if n < 0 or r < 0 or r > n:
+        return 0
     return perm(n, r) // perm(r, r)
 
 
 def combr(n, r):
+    if n == 0 and r == 0:
+        return 1
+    if n <= 0 or r < 0:
+        return 0
     return comb(n + r - 1, r)
 
 
