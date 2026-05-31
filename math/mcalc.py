@@ -1,4 +1,5 @@
 from collections import Counter, defaultdict
+from math import gcd
 
 
 def mpow(base, exp, mod):
@@ -156,3 +157,20 @@ def mlcm(a, mod):
 def repunit(n, mod):
     '''レピュニット数（1111111111）'''
     return ((pow(10, n, mod * 9) - 1) // 9) % mod
+
+
+def linear_congruence(a, b, mod):
+    '''
+    ax ≡ b (mod)
+    戻り値: 解なし None
+           解あり (r, mod2) x ≡ r (mod2)
+    '''
+    g = gcd(a, mod)
+    if b % g != 0:
+        return None
+    a //= g
+    b //= g
+    mod //= g
+    inv = pow(a, -1, mod)
+    r = (b * inv) % mod
+    return r, mod
