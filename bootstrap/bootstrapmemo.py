@@ -2,9 +2,9 @@ from functools import partial, wraps
 from types import GeneratorType
 
 
-def recurboostmemo(func=None, stack=[], memo={}, args_list=[]):
+def bootstrapmemo(func=None, stack=[], memo={}, args_list=[]):
     if func is None:
-        return partial(recurboostmemo, stack=stack, memo=memo, args_list=args_list)
+        return partial(bootstrapmemo, stack=stack, memo=memo, args_list=args_list)
 
     if isinstance(memo, dict):
         def getter(t): return memo.get(t, None)

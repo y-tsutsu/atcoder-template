@@ -2,9 +2,9 @@ from functools import partial, wraps
 from types import GeneratorType
 
 
-def recurboost(func=None, stack=[]):
+def bootstrap(func=None, stack=[]):
     if func is None:
-        return partial(recurboost, stack=stack)
+        return partial(bootstrap, stack=stack)
 
     @wraps(func)
     def wrappedfunc(*args, **kwargs):
@@ -25,7 +25,7 @@ def recurboost(func=None, stack=[]):
 
 
 def example():
-    @recurboost
+    @bootstrap
     def dfs(i):
         '''再帰関数をジェネレーターで実装する．returnと再帰呼び出しの個所にyieldをつける．'''
         if i == 101:
