@@ -74,6 +74,14 @@ class MComb:
             return 0
         return self.comb(n + r - 1, r)
 
+    def split(self, n, r):
+        '''n個をrグループへ分配（各グループ1個以上）'''
+        return self.combr(r, n - r)
+
+    def split0(self, n, r):
+        '''n個をrグループへ分配（空グループ可）'''
+        return self.combr(r, n)
+
 
 class MCombPascal:
     def __init__(self, max_, mod):
@@ -96,6 +104,14 @@ class MCombPascal:
         if n <= 0 or r < 0:
             return 0
         return self.comb(n + r - 1, r)
+
+    def split(self, n, r):
+        '''n個をrグループへ分配（各グループ1個以上）'''
+        return self.combr(r, n - r)
+
+    def split0(self, n, r):
+        '''n個をrグループへ分配（空グループ可）'''
+        return self.combr(r, n)
 
 
 def maccumulate(a, mod):
