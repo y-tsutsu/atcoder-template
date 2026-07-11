@@ -6,7 +6,7 @@ def read(): return next(_tokens)
 def iread(): return int(next(_tokens))
 
 
-def recurboost(func=None, stack=[]):
+def bootstrap(func=None, stack=[]):
     pass
 
 
@@ -21,7 +21,7 @@ def main():
     tot = sum(c)
     q = []  # 重心の個数は1 or 2
 
-    @recurboost
+    @bootstrap
     def dfs(i, p):
         ret = c[i]
         mx = 0  # 子側の部分木の重みの最大値

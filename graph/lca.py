@@ -1,4 +1,4 @@
-def recurboost(func=None, stack=[]):
+def bootstrap(func=None, stack=[]):
     pass
 
 
@@ -11,7 +11,7 @@ class LCA:
         self._depth = [0 for _ in range(n)]
         self._dist = [0 for _ in range(n)]
 
-    @recurboost
+    @bootstrap
     def _dfs(self, v, p, d, dist):
         self._parent[0][v] = p
         self._depth[v] = d

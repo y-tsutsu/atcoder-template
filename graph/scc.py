@@ -1,4 +1,4 @@
-def recurboost(func=None, stack=[]):
+def bootstrap(func=None, stack=[]):
     pass
 
 
@@ -12,7 +12,7 @@ class SCC:
         self._order = []
         self._group = [None for _ in range(n)]
 
-    @recurboost(stack=[])
+    @bootstrap(stack=[])
     def dfs(self, s, to, used):
         used[s] = 1
         for i in to[s]:
@@ -21,7 +21,7 @@ class SCC:
         self._order.append(s)
         yield
 
-    @recurboost(stack=[])
+    @bootstrap(stack=[])
     def rdfs(self, s, to, label, used):
         self._group[s] = label
         used[s] = 1

@@ -2,7 +2,7 @@ from collections import deque
 from sys import maxsize
 
 
-def recurboost(func=None, stack=[]):
+def bootstrap(func=None, stack=[]):
     pass
 
 
@@ -38,7 +38,7 @@ class Dinic:
                     dq.append(w)
         return level[t] is not None
 
-    @recurboost
+    @bootstrap
     def _dfs(self, v, t, f, it):
         if v == t:
             yield f

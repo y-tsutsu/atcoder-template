@@ -122,11 +122,11 @@ def maccumulate(a, mod):
     return ret
 
 
-def recurboost(func=None, stack=[]):
+def bootstrap(func=None, stack=[]):
     pass
 
 
-@recurboost
+@bootstrap
 def mgeosum(a, r, n, mod):
     '''等比数列の和のMOD版（a:初項 r:公比 n:項数）'''
     if n == 1:
@@ -138,11 +138,11 @@ def mgeosum(a, r, n, mod):
     yield ret
 
 
-def recurboostmemo(func=None, stack=[], memo={}, args_list=[]):
+def bootstrapmemo(func=None, stack=[], memo={}, args_list=[]):
     pass
 
 
-@recurboostmemo
+@bootstrapmemo
 def mgeosummemo(a, r, n, mod):
     '''等比数列の和のMODメモ化再帰版（a:初項 r:公比 n:項数）'''
     if n == 1:

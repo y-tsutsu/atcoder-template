@@ -1,4 +1,4 @@
-def recurboost(func=None, stack=[]):
+def bootstrap(func=None, stack=[]):
     pass
 
 
@@ -14,7 +14,7 @@ class Parser:
         self._n = len(s)
         self._i = 0
 
-    @recurboost
+    @bootstrap
     def parse(self, d=0):
         ret = Parser.Node(d, '')
         while self._i != self._n:

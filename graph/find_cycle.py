@@ -1,11 +1,11 @@
-def recurboost(func=None, stack=[]):
+def bootstrap(func=None, stack=[]):
     pass
 
 
 def find_cycle(n, to):
     done = [0 for _ in range(n)]
 
-    @recurboost
+    @bootstrap
     def dfs(i, route):
         done[i] = 1
         route.add(i)

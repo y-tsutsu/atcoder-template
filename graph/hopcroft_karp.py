@@ -2,7 +2,7 @@ from collections import deque
 from sys import maxsize
 
 
-def recurboost(func=None, stack=[]):
+def bootstrap(func=None, stack=[]):
     pass
 
 
@@ -44,7 +44,7 @@ class HopcroftKarp:
 
         return found
 
-    @recurboost
+    @bootstrap
     def _dfs(self, v):
         for w in self._g[v]:
             u = self._matchr[w]

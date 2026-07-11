@@ -26,12 +26,12 @@ def diameter(n, to):
     return s, e, m
 
 
-def recurboost(func=None, stack=[]):
+def bootstrap(func=None, stack=[]):
     pass
 
 
 def route(s, e, to):
-    @recurboost
+    @bootstrap
     def dfs(i, p, route):
         route.append(i)
         if i == e:
@@ -54,7 +54,7 @@ def rerooting_dp(n, to):
     '''全方位木DPでの木の直径算出'''
     d = [0 for _ in range(n)]
 
-    @recurboost
+    @bootstrap
     def dfs(i, p):
         ret = 0
         for j in to[i]:
@@ -67,7 +67,7 @@ def rerooting_dp(n, to):
 
     dfs(0, -1)
 
-    @recurboost
+    @bootstrap
     def dfs2(i, p, pv):
         a = [(0, -1)]  # 番兵
         for j in to[i]:

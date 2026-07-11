@@ -2,7 +2,7 @@ class Range():
     pass
 
 
-def recurboost(func=None, stack=[]):
+def bootstrap(func=None, stack=[]):
     pass
 
 
@@ -10,7 +10,7 @@ def split_seg(mainrange: Range):
     '''seg_tree的な区間に分割'''
     ret = []
 
-    @recurboost
+    @bootstrap
     def dfs(segrange: Range):
         if segrange.contained_in(mainrange):
             ret.append(segrange)

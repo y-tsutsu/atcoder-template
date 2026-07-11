@@ -1,4 +1,4 @@
-def recurboost(func=None, stack=[]):
+def bootstrap(func=None, stack=[]):
     pass
 
 
@@ -18,7 +18,7 @@ class TrieTree:
     def __init__(self):
         self._root = TrieTree.Node()
 
-    @recurboost
+    @bootstrap
     def insert(self, text, parent=None, pos=0):
         if parent is None:
             parent = self._root
@@ -34,7 +34,7 @@ class TrieTree:
         ret = yield self.insert(text, node, pos + 1)
         yield ret
 
-    @recurboost
+    @bootstrap
     def lcp(self, text, parent=None, pos=0):
         '''最長共通prefix'''
         if parent is None:
@@ -62,7 +62,7 @@ class TrieTree:
         '''textが登録された文字列のうち複数の共通prefixとして存在するか？'''
         return self._inner_search(text, None, 0, lambda p: p.count >= 2)
 
-    @recurboost
+    @bootstrap
     def _inner_search(self, text, parent, pos, result_funk):
         if parent is None:
             parent = self._root
@@ -74,7 +74,7 @@ class TrieTree:
         ret = yield self._inner_search(text, parent.children[c], pos + 1, result_funk)
         yield ret
 
-    @recurboost
+    @bootstrap
     def dfs(self, parent=None, result=[]):
         if parent is None:
             parent = self._root
