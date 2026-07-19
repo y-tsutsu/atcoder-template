@@ -36,14 +36,31 @@ class TestConnectivityAndFlow(unittest.TestCase):
 
     def test_scc(self):
         edges = [(0, 1), (1, 0), (1, 2), (2, 3), (3, 2), (3, 4)]
-        to = [[] for _ in range(5)]
-        reverse = [[] for _ in range(5)]
+        scc = self.scc_module['SCC'](5)
         for u, v in edges:
-            to[u].append(v)
-            reverse[v].append(u)
-        groups, graph = self.scc_module['SCC'](5, to, reverse).scc()
-        self.assertEqual(groups, [[0, 1], [2, 3], [4]])
-        self.assertEqual(graph, [{1}, {2}, set()])
+            scc.add_edge(u, v)
+        self.assertEqual(scc.build(), 3)
+        self.assertEqual(scc.label, [0, 0, 1, 1, 2])
+        self.assertEqual(scc.groups(), [[0, 1], [2, 3], [4]])
+        self.assertEqual(scc.dag(), [[1], [2], []])
+        self.assertTrue(scc.same(0, 1))
+        self.assertFalse(scc.same(1, 2))
+
+    def test_scc_with_isolated_vertex_and_duplicate_edges(self):
+        scc = self.scc_module['SCC'](4)
+        for edge in ((0, 0), (0, 1), (0, 1), (1, 0), (1, 2)):
+            scc.add_edge(*edge)
+        self.assertEqual(scc.build(), 3)
+        self.assertEqual(scc.groups(), [[3], [0, 1], [2]])
+        self.assertEqual(scc.dag(), [[], [2], []])
+
+    def test_scc_without_recursion(self):
+        n = 10000
+        scc = self.scc_module['SCC'](n)
+        for i in range(n - 1):
+            scc.add_edge(i, i + 1)
+        self.assertEqual(scc.build(), n)
+        self.assertEqual(scc.label, list(range(n)))
 
     def test_directed_cycle(self):
         find_cycle = self.find_cycle_module['find_cycle']
