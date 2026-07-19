@@ -54,6 +54,9 @@ class TestNumberTheory(unittest.TestCase):
             self.assertTrue(all(is_prime(p) for p in factors))
             self.assertEqual(factors, sorted(factors))
 
+        with self.assertRaises(AssertionError):
+            prime_factorize(0)
+
     def test_system_of_equations_with_unique_solution(self):
         solve = self.system_module['system_of_equations']
         unique = self.system_module['UNIQUE']

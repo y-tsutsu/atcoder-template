@@ -2,6 +2,7 @@ from math import isqrt
 
 
 def prime_factorize(n):
+    assert n > 0
     ret = []
     while n % 2 == 0:
         ret.append(2)
