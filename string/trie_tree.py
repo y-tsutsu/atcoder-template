@@ -1,188 +1,231 @@
-def bootstrap(func=None, stack=[]):
-    pass
-
-
 class TrieTree:
-    class Node:
-        def __init__(self, char='', rank=-1, parent=None):
-            self.char = char
-            self.rank = rank
-            self.parent = parent
-            self.children = {}
-            self.count = 0
-            self.value = None
+    '''文字列の検索・prefix検索・辞書順操作を文字列長に比例する時間で行うTrie木'''
 
-        def is_terminate(self):
-            return self.value is not None
+    class Node:
+        __slots__ = ('children', 'prefix_count', 'terminal_count')
+
+        def __init__(self):
+            self.children = {}
+            self.prefix_count = 0
+            self.terminal_count = 0
 
     def __init__(self):
         self._root = TrieTree.Node()
+        self._distinct_size = 0
 
-    @bootstrap
-    def insert(self, text, parent=None, pos=0):
-        if parent is None:
-            parent = self._root
-        if pos == len(text):
-            parent.value = text
-            parent.count += 1
-            yield parent
-        parent.count += 1
-        c = text[pos]
-        if c not in parent.children:
-            parent.children[c] = TrieTree.Node(char=c, rank=pos, parent=parent)
-        node = parent.children[c]
-        ret = yield self.insert(text, node, pos + 1)
-        yield ret
+    def __len__(self):
+        '''重複を含む登録文字列数を返す'''
+        return self._root.prefix_count
 
-    @bootstrap
-    def lcp(self, text, parent=None, pos=0):
-        '''最長共通prefix'''
-        if parent is None:
-            parent = self._root
-        if pos == len(text):
-            yield text[:parent.rank + 1]
-        c = text[pos]
-        if c not in parent.children:
-            yield text[:parent.rank + 1]
-        child = parent.children[c]
-        if child.count == 1:
-            yield text[:parent.rank + 1]
-        ret = yield self.lcp(text, parent.children[c], pos + 1)
-        yield ret
+    def insert(self, text):
+        '''文字列を1個登録し、終端ノードを返す'''
+        node = self._root
+        node.prefix_count += 1
+        for c in text:
+            if c not in node.children:
+                node.children[c] = TrieTree.Node()
+            node = node.children[c]
+            node.prefix_count += 1
+        if node.terminal_count == 0:
+            self._distinct_size += 1
+        node.terminal_count += 1
+        return node
+
+    def erase(self, text):
+        '''登録された文字列を1個削除し、削除できたかを返す'''
+        node = self._root
+        path = [node]
+        for c in text:
+            if c not in node.children:
+                return False
+            node = node.children[c]
+            path.append(node)
+        if node.terminal_count == 0:
+            return False
+
+        node.terminal_count -= 1
+        if node.terminal_count == 0:
+            self._distinct_size -= 1
+        for node in path:
+            node.prefix_count -= 1
+        for i in range(len(text) - 1, -1, -1):
+            parent = path[i]
+            child = path[i + 1]
+            if child.prefix_count > 0:
+                break
+            del parent.children[text[i]]
+        return True
+
+    def count(self, text):
+        '''文字列の登録数を返す'''
+        node = self._find_node(text)
+        return 0 if node is None else node.terminal_count
+
+    def count_prefix(self, prefix):
+        '''prefixで始まる登録文字列数を返す'''
+        node = self._find_node(prefix)
+        return 0 if node is None else node.prefix_count
+
+    def distinct_size(self):
+        '''重複を除いた登録文字列数を返す'''
+        return self._distinct_size
 
     def search(self, text):
-        '''textが登録済みか？'''
-        return self._inner_search(text, None, 0, lambda p: p.is_terminate())
+        '''文字列が1個以上登録されているかを返す'''
+        return self.count(text) > 0
 
-    def prefix_with(self, text):
-        '''textが登録された文字列のprefixとして存在するか？'''
-        return self._inner_search(text, None, 0, lambda _: True)
+    def prefix_with(self, prefix):
+        '''prefixで始まる登録文字列が存在するかを返す'''
+        return self.count_prefix(prefix) > 0
 
-    def common_prefix_with(self, text):
-        '''textが登録された文字列のうち複数の共通prefixとして存在するか？'''
-        return self._inner_search(text, None, 0, lambda p: p.count >= 2)
+    def common_prefix_with(self, prefix):
+        '''prefixで始まる登録文字列が2個以上存在するかを返す'''
+        return self.count_prefix(prefix) >= 2
 
-    @bootstrap
-    def _inner_search(self, text, parent, pos, result_func):
-        if parent is None:
-            parent = self._root
-        if pos == len(text):
-            yield result_func(parent)
-        c = text[pos]
-        if c not in parent.children:
-            yield False
-        ret = yield self._inner_search(text, parent.children[c], pos + 1, result_func)
-        yield ret
+    def prefixes(self, text):
+        '''textのprefixとして登録されている文字列と登録数を短い順に返す'''
+        ret = []
+        node = self._root
+        if node.terminal_count > 0:
+            ret.append(('', node.terminal_count))
+        for i, c in enumerate(text):
+            if c not in node.children:
+                break
+            node = node.children[c]
+            if node.terminal_count > 0:
+                ret.append((text[:i + 1], node.terminal_count))
+        return ret
 
-    @bootstrap
-    def dfs(self, parent=None):
-        if parent is None:
-            parent = self._root
-        for k, node in sorted(parent.children.items()):
-            yield self.dfs(node)
-        yield
+    def longest_prefix(self, text):
+        '''textのprefixとして登録されている最長の文字列を返す'''
+        node = self._root
+        length = 0 if node.terminal_count > 0 else -1
+        for i, c in enumerate(text):
+            if c not in node.children:
+                break
+            node = node.children[c]
+            if node.terminal_count > 0:
+                length = i + 1
+        return None if length < 0 else text[:length]
+
+    def lcp(self, text):
+        '''textのうち2個以上の登録文字列が共有する最長prefixを返す'''
+        node = self._root
+        i = 0
+        while i < len(text):
+            c = text[i]
+            if c not in node.children:
+                break
+            child = node.children[c]
+            if child.prefix_count < 2:
+                break
+            node = child
+            i += 1
+        return text[:i]
+
+    def items(self, prefix=''):
+        '''prefixで始まる登録文字列と登録数を辞書順に返す'''
+        node = self._find_node(prefix)
+        if node is None:
+            return []
+        ret = []
+        stack = [(node, prefix)]
+        while stack:
+            node, text = stack.pop()
+            if node.terminal_count > 0:
+                ret.append((text, node.terminal_count))
+            for c, child in sorted(node.children.items(), reverse=True):
+                stack.append((child, text + c))
+        return ret
+
+    def words(self, prefix=''):
+        '''prefixで始まる登録文字列を重複込みの辞書順で返す'''
+        return [text for text, count in self.items(prefix) for _ in range(count)]
+
+    def kth(self, k):
+        '''重複込みの辞書順で0-indexedのk番目の文字列を返す'''
+        assert 0 <= k < len(self)
+        node = self._root
+        text = ''
+        while True:
+            if k < node.terminal_count:
+                return text
+            k -= node.terminal_count
+            for c, child in sorted(node.children.items()):
+                if k < child.prefix_count:
+                    node = child
+                    text += c
+                    break
+                k -= child.prefix_count
+
+    def bisect_left(self, text):
+        '''textより辞書順で小さい登録文字列数を返す'''
+        node = self._root
+        ret = 0
+        for c in text:
+            ret += node.terminal_count
+            for key, child in node.children.items():
+                if key < c:
+                    ret += child.prefix_count
+            if c not in node.children:
+                return ret
+            node = node.children[c]
+        return ret
+
+    def bisect_right(self, text):
+        '''text以下の登録文字列数を返す'''
+        return self.bisect_left(text) + self.count(text)
+
+    def prev(self, text):
+        '''textより辞書順で小さい最大の登録文字列を返す'''
+        i = self.bisect_left(text)
+        return None if i == 0 else self.kth(i - 1)
+
+    def next(self, text):
+        '''textより辞書順で大きい最小の登録文字列を返す'''
+        i = self.bisect_right(text)
+        return None if i == len(self) else self.kth(i)
+
+    def _find_node(self, text):
+        node = self._root
+        for c in text:
+            if c not in node.children:
+                return None
+            node = node.children[c]
+        return node
 
 
 def example():
-    tr = TrieTree()
-    tr.insert('abcd')
-    tr.insert('abcc')
-    tr.insert('abxyz')
-    tr.insert('abx')
-    tr.insert('abxy')
-    tr.insert('b')
-    tr.insert('bb')
-    tr.insert('bbb')
-    tr.insert('ccc')
-    print('## count: ##')
-    print(tr._root.count == 9)
-    print(tr._root.children['a'].count == 5)
-    print(tr._root.children['a'].children['b'].count == 5)
-    print(tr._root.children['a'].children['b'].children['c'].count == 2)
-    print(tr._root.children['a'].children['b'].children['x'].count == 3)
-    print(tr._root.children['a'].children['b'].children['c'].children['d'].count == 1)
-    print(tr._root.children['a'].children['b'].children['c'].children['c'].count == 1)
-    print(tr._root.children['a'].children['b'].children['x'].children['y'].count == 2)
-    print(tr._root.children['a'].children['b'].children['x'].children['y'].children['z'].count == 1)
-    print(tr._root.children['b'].count == 3)
-    print(tr._root.children['b'].children['b'].count == 2)
-    print(tr._root.children['b'].children['b'].children['b'].count == 1)
-    print(tr._root.children['c'].count == 1)
-    print(tr._root.children['c'].children['c'].count == 1)
-    print(tr._root.children['c'].children['c'].children['c'].count == 1)
-    print(f'## search: {True} ##')
-    print(tr.search('abcd'))
-    print(tr.search('abcc'))
-    print(tr.search('abxyz'))
-    print(tr.search('abx'))
-    print(tr.search('abxy'))
-    print(tr.search('b'))
-    print(tr.search('bb'))
-    print(tr.search('bbb'))
-    print(tr.search('ccc'))
-    print(f'## search: {False} ##')
-    print(tr.search('a'))
-    print(tr.search('ab'))
-    print(tr.search('abc'))
-    print(tr.search('abce'))
-    print(tr.search('abcde'))
-    print(tr.search('d'))
-    print(tr.search('dd'))
-    print(tr.search('ddd'))
-    print(tr.search('cc'))
-    print(tr.search('c'))
-    print(tr.search(''))
-    print(f'## prefix_with: {True} ##')
-    print(tr.prefix_with('abc'))
-    print(tr.prefix_with('ab'))
-    print(tr.prefix_with('a'))
-    print(tr.prefix_with('abxy'))
-    print(tr.prefix_with('abx'))
-    print(tr.prefix_with('bb'))
-    print(tr.prefix_with('b'))
-    print(tr.prefix_with('cc'))
-    print(tr.prefix_with('c'))
-    print(tr.prefix_with(''))
-    print(tr.prefix_with('abcd'))
-    print(tr.prefix_with('abcc'))
-    print(tr.prefix_with('abxyz'))
-    print(tr.prefix_with('bbb'))
-    print(tr.prefix_with('ccc'))
-    print(f'## prefix_with: {False} ##')
-    print(tr.prefix_with('bbbb'))
-    print(tr.prefix_with('z'))
-    print(f'## common_prefix_with: {True} ##')
-    print(tr.common_prefix_with('abc'))
-    print(tr.common_prefix_with('ab'))
-    print(tr.common_prefix_with('a'))
-    print(tr.common_prefix_with('abxy'))
-    print(tr.common_prefix_with('abx'))
-    print(tr.common_prefix_with('bb'))
-    print(tr.common_prefix_with('b'))
-    print(tr.common_prefix_with(''))
-    print(f'## common_prefix_with: {False} ##')
-    print(tr.common_prefix_with('abcd'))
-    print(tr.common_prefix_with('abcc'))
-    print(tr.common_prefix_with('abxyz'))
-    print(tr.common_prefix_with('bbbb'))
-    print(tr.common_prefix_with('bbb'))
-    print(tr.common_prefix_with('ccc'))
-    print(tr.common_prefix_with('cc'))
-    print(tr.common_prefix_with('c'))
-    print(tr.common_prefix_with('z'))
-    print('## lcp: ##')
-    print(tr.lcp('abcd') == 'abc')
-    print(tr.lcp('abcc') == 'abc')
-    print(tr.lcp('abxyz') == 'abxy')
-    print(tr.lcp('abx') == 'abx')
-    print(tr.lcp('abxy') == 'abxy')
-    print(tr.lcp('b') == 'b')
-    print(tr.lcp('bb') == 'bb')
-    print(tr.lcp('bbb') == 'bb')
-    print(tr.lcp('ccc') == '')
-    print(tr.lcp('abcz') == 'abc')
-    print(tr.lcp('az') == 'a')
-    print(tr.lcp('z') == '')
+    trie = TrieTree()
+    for word in ('app', 'apple', 'apple', 'apply', 'bat'):
+        trie.insert(word)
+
+    # 完全一致の検索と登録数
+    print(trie.search('apple'))       # True
+    print(trie.search('ap'))          # False
+    print(trie.count('apple'))        # 2
+
+    # prefix検索と、そのprefixを持つ文字列数
+    print(trie.prefix_with('app'))     # True
+    print(trie.count_prefix('app'))    # 4
+    print(trie.count_prefix('cat'))    # 0
+
+    # 入力文字列のprefixとして登録済みの文字列を探す
+    print(trie.prefixes('applepie'))   # [('app', 1), ('apple', 2)]
+    print(trie.longest_prefix('apply'))  # apply
+
+    # 辞書順列挙とk番目の文字列（重複を含む）
+    print(trie.items('app'))           # [('app', 1), ('apple', 2), ('apply', 1)]
+    print(trie.words())                # app, apple, apple, apply, bat
+    print(trie.kth(3))                 # apply
+
+    # 登録されていない文字列に対しても辞書順の前後を探せる
+    print(trie.prev('ball'))            # apply
+    print(trie.next('ball'))            # bat
+
+    # 1個ずつ削除でき、登録数が0になると検索にもヒットしなくなる
+    trie.erase('apple')
+    print(trie.count('apple'))         # 1
 
 
 if __name__ == '__main__':
