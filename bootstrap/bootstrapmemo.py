@@ -6,6 +6,12 @@ def bootstrapmemo(func=None, stack=[], memo={}, args_list=[]):
     if func is None:
         return partial(bootstrapmemo, stack=stack, memo=memo, args_list=args_list)
 
+    class _Cached:
+        __slots__ = ('value',)
+
+        def __init__(self, value):
+            self.value = value
+
     if isinstance(memo, dict):
         def getter(t): return memo.get(t, None)
         def setter(t, x): memo[t] = x
@@ -15,21 +21,17 @@ def bootstrapmemo(func=None, stack=[], memo={}, args_list=[]):
 
     @wraps(func)
     def wrappedfunc(*args, **kwargs):
+        v = getter(args)
+        if v is not None:
+            return _Cached(v) if stack else v
         args_list.append(args)
         if stack:
             return func(*args, **kwargs)
         to = func(*args, **kwargs)
         while True:
-            v = getter(args_list[-1])
-            if v is not None:
-                if not isinstance(to, GeneratorType):
-                    stack.pop()
-                args_list.pop()
-                if not stack and not args_list:
-                    return v
-                to = stack[-1].send(v)
-                continue
-            if isinstance(to, GeneratorType):
+            if isinstance(to, _Cached):
+                to = stack[-1].send(to.value)
+            elif isinstance(to, GeneratorType):
                 stack.append(to)
                 to = next(to)
             else:
