@@ -1,7 +1,7 @@
 import math
 import unittest
 
-from geometry.geometry import Sfol
+from geometry.geometry import Line
 from geometry.geometry import calc_distance
 from geometry.geometry import calc_intersection_point
 from geometry.geometry import calc_triangle_area
@@ -28,10 +28,39 @@ class TestGeometry(unittest.TestCase):
         self.assertAlmostEqual(y, 2)
 
     def test_standard_form_of_line(self):
-        self.assertEqual(Sfol(0, 1, 2, 1), Sfol(5, 1, 8, 1))
-        self.assertEqual(Sfol(2, 0, 2, 3), Sfol(2, -5, 2, 10))
+        self.assertEqual(Line(0, 1, 2, 1), Line(5, 1, 8, 1))
+        self.assertEqual(Line(2, 0, 2, 3), Line(2, -5, 2, 10))
         with self.assertRaises(AssertionError):
-            Sfol(1, 1, 1, 1)
+            Line(1, 1, 1, 1)
+
+    def test_line_relationships(self):
+        line = Line(0, 0, 2, 2)
+        parallel = Line(0, 1, 2, 3)
+        perpendicular = Line(0, 2, 2, 0)
+        self.assertTrue(line.contains(3, 3))
+        self.assertFalse(line.contains(3, 4))
+        self.assertTrue(line.is_parallel(parallel))
+        self.assertFalse(line.is_parallel(perpendicular))
+        self.assertTrue(line.is_perpendicular(perpendicular))
+        self.assertFalse(line.is_perpendicular(parallel))
+
+    def test_line_intersection(self):
+        line1 = Line(0, 0, 2, 2)
+        line2 = Line(0, 2, 2, 0)
+        x, y = line1.intersection(line2)
+        self.assertAlmostEqual(x, 1)
+        self.assertAlmostEqual(y, 1)
+        self.assertIsNone(line1.intersection(Line(0, 1, 2, 3)))
+        intersection = line1.intersection(Line(3, 3, 4, 4))
+        self.assertIsInstance(intersection, Line)
+        self.assertEqual(intersection, line1)
+
+    def test_line_distance_and_projection(self):
+        line = Line(0, 0, 2, 2)
+        self.assertAlmostEqual(line.distance(0, 1), math.sqrt(0.5))
+        x, y = line.projection(0, 2)
+        self.assertAlmostEqual(x, 1)
+        self.assertAlmostEqual(y, 1)
 
     def test_distance_to_segment(self):
         self.assertEqual(calc_distance(5, 3, 0, 0, 10, 0), 3)

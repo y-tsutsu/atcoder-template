@@ -22,7 +22,7 @@ def rotate(x, y, cx, cy, radian):
     return tuple(a + b for a, b in zip(rotate_origin(x - cx, y - cy, radian), (cx, cy)))
 
 
-class Sfol:
+class Line:
     '''Standard Form of a Line (ax + by = c)'''
 
     def __init__(self, x1, y1, x2, y2):
@@ -43,7 +43,7 @@ class Sfol:
         self.c = self.a * x1 + self.b * y1
 
     def __eq__(self, other):
-        if not isinstance(other, Sfol):
+        if not isinstance(other, Line):
             return False
         return (self.b, self.a, self.c) == (other.b, other.a, other.c)
 
@@ -52,6 +52,37 @@ class Sfol:
 
     def __str__(self):
         return f'{self.a} {self.b} {self.c}'
+
+    def contains(self, x, y):
+        '''点(x, y)が直線上にあるか判定'''
+        return self.a * x + self.b * y == self.c
+
+    def is_parallel(self, other):
+        '''直線otherと平行か判定'''
+        return self.a * other.b - self.b * other.a == 0
+
+    def is_perpendicular(self, other):
+        '''直線otherと垂直か判定'''
+        return self.a * other.a + self.b * other.b == 0
+
+    def intersection(self, other):
+        '''直線otherとの交点を返し、平行ならNone、同一直線ならLineを返す'''
+        det = self.a * other.b - other.a * self.b
+        if det == 0:
+            return self if self == other else None
+        x = (self.c * other.b - other.c * self.b) / det
+        y = (self.a * other.c - other.a * self.c) / det
+        return x, y
+
+    def distance(self, x, y):
+        '''点(x, y)との距離を返す'''
+        u = abs(self.a * x + self.b * y - self.c)
+        return u / (self.a ** 2 + self.b ** 2) ** 0.5
+
+    def projection(self, x, y):
+        '''点(x, y)から直線へ下ろした垂線の足を返す'''
+        d = (self.a * x + self.b * y - self.c) / (self.a ** 2 + self.b ** 2)
+        return x - self.a * d, y - self.b * d
 
 
 @total_ordering
@@ -98,18 +129,18 @@ class Vec:
     def __str__(self):
         return f'({self.x}, {self.y})'
 
+    def dot(self, other):
+        '''内積（符号でなす角が鋭角・直角・鈍角か判定）'''
+        return self.x * other.x + self.y * other.y
+
     def cross(self, other):
-        '''外積'''
+        '''外積（符号で回転方向、絶対値で平行四辺形の面積、0で平行を判定）'''
         return self.x * other.y - self.y * other.x
 
     def ccw(self, other):
         '''1:反時計回り, -1:時計回り, 0:直線上'''
         s = self.cross(other)
         return 1 if s > 0 else (-1 if s < 0 else 0)
-
-    def dot(self, other):
-        '''内積'''
-        return self.x * other.x + self.y * other.y
 
 
 def calc_distance(px, py, ax, ay, bx, by):
@@ -128,24 +159,18 @@ def calc_distance(px, py, ax, ay, bx, by):
         return ((px - bx) ** 2 + (py - by) ** 2) ** 0.5
     else:
         # 点Pから線分ABへの垂線が最短距離
-        sfol = Sfol(ax, ay, bx, by)
-        if sfol.a == 0:
+        line = Line(ax, ay, bx, by)
+        if line.a == 0:
             return abs(py - ay)
-        elif sfol.b == 0:
+        elif line.b == 0:
             return abs(px - ax)
         else:
-            u = abs(sfol.a * px + sfol.b * py - sfol.c)
-            v = (sfol.a ** 2 + sfol.b ** 2) ** 0.5
-            return u / v
+            return line.distance(px, py)
 
 
 def calc_intersection_point(px, py, ax, ay, bx, by):
     '''点Pから直線ABへの垂線の交点'''
-    sfol = Sfol(ax, ay, bx, by)
-    a, b, c = sfol.a, sfol.b, -sfol.c
-    x = ((b ** 2) * px - a * b * py - a * c) / (a ** 2 + b ** 2)
-    y = ((a ** 2) * py - a * b * px - b * c) / (a ** 2 + b ** 2)
-    return x, y
+    return Line(ax, ay, bx, by).projection(px, py)
 
 
 def intersect(ax, ay, bx, by, cx, cy, dx, dy):
