@@ -55,6 +55,13 @@ class TestGeometry(unittest.TestCase):
         self.assertIsInstance(intersection, Line)
         self.assertEqual(intersection, line1)
 
+    def test_perpendicular_line(self):
+        line = Line(0, 0, 2, 0)
+        perpendicular = line.perpendicular(3, 4)
+        self.assertTrue(perpendicular.contains(3, 4))
+        self.assertTrue(line.is_perpendicular(perpendicular))
+        self.assertEqual(perpendicular, Line(3, 0, 3, 10))
+
     def test_line_distance_and_projection(self):
         line = Line(0, 0, 2, 2)
         self.assertAlmostEqual(line.distance(0, 1), math.sqrt(0.5))

@@ -65,6 +65,10 @@ class Line:
         '''直線otherと垂直か判定'''
         return self.a * other.a + self.b * other.b == 0
 
+    def perpendicular(self, x, y):
+        '''点(x, y)を通り、この直線と垂直な直線を返す'''
+        return Line(x, y, x + self.a, y + self.b)
+
     def intersection(self, other):
         '''直線otherとの交点を返し、平行ならNone、同一直線ならLineを返す'''
         det = self.a * other.b - other.a * self.b
