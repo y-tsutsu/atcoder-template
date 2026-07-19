@@ -63,19 +63,19 @@ class TrieTree:
         return self._inner_search(text, None, 0, lambda p: p.count >= 2)
 
     @bootstrap
-    def _inner_search(self, text, parent, pos, result_funk):
+    def _inner_search(self, text, parent, pos, result_func):
         if parent is None:
             parent = self._root
         if pos == len(text):
-            yield result_funk(parent)
+            yield result_func(parent)
         c = text[pos]
         if c not in parent.children:
             yield False
-        ret = yield self._inner_search(text, parent.children[c], pos + 1, result_funk)
+        ret = yield self._inner_search(text, parent.children[c], pos + 1, result_func)
         yield ret
 
     @bootstrap
-    def dfs(self, parent=None, result=[]):
+    def dfs(self, parent=None):
         if parent is None:
             parent = self._root
         for k, node in sorted(parent.children.items()):
@@ -170,7 +170,7 @@ def example():
     print(tr.common_prefix_with('cc'))
     print(tr.common_prefix_with('c'))
     print(tr.common_prefix_with('z'))
-    print(f'## lcp: ##')
+    print('## lcp: ##')
     print(tr.lcp('abcd') == 'abc')
     print(tr.lcp('abcc') == 'abc')
     print(tr.lcp('abxyz') == 'abxy')

@@ -39,9 +39,6 @@ class SegRollingHash:
         self._st = self._init_hash(self._n)
         for i, c in enumerate(s):
             self.set(i, c)
-        self._pow = [1]
-        for _ in range(self._n):
-            self._pow.append(self._pow[-1] * base % self._mod)
 
     def _init_hash(self, n):
         def op(x, y):
@@ -71,5 +68,6 @@ class SegRollingHash:
         return a, b
 
     def set(self, p, c):
+        # c は英小文字
         v = ord(c) - ord('a') + 1
         self._st.set(p, (v, v, p, p + 1))
