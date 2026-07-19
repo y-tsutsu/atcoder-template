@@ -3,11 +3,11 @@ from random import randint
 
 def write_one(f, a): print(a, file=f)
 def write_multi(f, *a): print(f'{" ".join([str(x) for x in a])}', file=f)
-def write_list_spase(f, a): print(f'{" ".join([str(x) for x in a])}', file=f)
+def write_list_space(f, a): print(f'{" ".join([str(x) for x in a])}', file=f)
 def write_list_nline(f, a): print(f'{"\n".join([str(x) for x in a])}', file=f)
 def print_one(a): print(a)
 def print_multi(*a): print(f'{" ".join([str(x) for x in a])}')
-def print_list_spase(a): print(f'{" ".join([str(x) for x in a])}')
+def print_list_space(a): print(f'{" ".join([str(x) for x in a])}')
 def print_list_nline(a): print(f'{"\n".join([str(x) for x in a])}')
 
 
