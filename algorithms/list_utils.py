@@ -29,10 +29,10 @@ def rotate_ccw(p):
 
 
 def transpose(p):
-    return [x for x in zip(*p)]
+    return [list(x) for x in zip(*p)]
 
 
-def normalize(p, empty='.'):
+def trim(p, empty='.'):
     h, w = len(p), len(p[0])
     mni, mxi, mnj, mxj = h, -1, w, -1
     for i in range(h):
@@ -61,7 +61,7 @@ def example():
     print(transpose(p))
 
     p = ['....', '###.', '.#..', '....']
-    for x in normalize(p):
+    for x in trim(p):
         print(*x)
 
 

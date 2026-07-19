@@ -1,3 +1,4 @@
+import random
 import unittest
 
 from algorithms.bisect_lambda import bisect_ng_ok
@@ -14,6 +15,13 @@ class TestBisectLambda(unittest.TestCase):
         self.assertEqual(bisect_ok_ng(0, 10, lambda x: x <= 6), 6)
         self.assertEqual(bisect_ok_ng(0, 10, lambda x: True), 10)
         self.assertEqual(bisect_ok_ng(0, 10, lambda x: False), -1)
+
+    def test_random_boundary(self):
+        random.seed(0)
+        for _ in range(100):
+            boundary = random.randrange(-20, 21)
+            self.assertEqual(bisect_ng_ok(-20, 20, lambda x: x >= boundary), boundary)
+            self.assertEqual(bisect_ok_ng(-20, 20, lambda x: x <= boundary), boundary)
 
 
 if __name__ == '__main__':

@@ -38,6 +38,11 @@ class TestRange(unittest.TestCase):
         intervals = [Range(2, 4), Range(1, 5), Range(1, 3)]
         self.assertEqual(sorted(intervals), [Range(1, 3), Range(1, 5), Range(2, 4)])
 
+    def test_empty_and_invalid_range(self):
+        self.assertEqual(len(Range(2, 2)), 0)
+        with self.assertRaises(AssertionError):
+            Range(3, 2)
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -3,7 +3,9 @@ from functools import total_ordering
 
 @total_ordering
 class Range():
-    def __init__(self, s, e): self.s, self.e = s, e
+    def __init__(self, s, e):
+        assert s <= e
+        self.s, self.e = s, e
 
     def __iter__(self): return (i for i in range(self.s, self.e))
 

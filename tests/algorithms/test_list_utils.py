@@ -2,11 +2,11 @@ import unittest
 
 from algorithms.list_utils import chunks
 from algorithms.list_utils import flatten
-from algorithms.list_utils import normalize
 from algorithms.list_utils import rotate_ccw
 from algorithms.list_utils import rotate_cw
 from algorithms.list_utils import scatter
 from algorithms.list_utils import transpose
+from algorithms.list_utils import trim
 
 
 class TestListUtils(unittest.TestCase):
@@ -24,12 +24,12 @@ class TestListUtils(unittest.TestCase):
         self.assertEqual(rotate_ccw(rotate_cw(a)), a)
 
     def test_transpose(self):
-        self.assertEqual(transpose([[1, 2, 3], [4, 5, 6]]), [(1, 4), (2, 5), (3, 6)])
+        self.assertEqual(transpose([[1, 2, 3], [4, 5, 6]]), [[1, 4], [2, 5], [3, 6]])
 
-    def test_normalize(self):
+    def test_trim(self):
         a = ['....', '.##.', '..#.', '....']
-        self.assertEqual(normalize(a), [['#', '#'], ['.', '#']])
-        self.assertEqual(normalize(['...', '...']), [])
+        self.assertEqual(trim(a), [['#', '#'], ['.', '#']])
+        self.assertEqual(trim(['...', '...']), [])
 
 
 if __name__ == '__main__':
