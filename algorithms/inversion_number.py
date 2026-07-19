@@ -8,6 +8,8 @@ def compress(a, start=0):
 
 def inv_num(a):
     '''転倒数'''
+    if not a:
+        return 0
     p = compress(a)
     tot = 0
     bit = BIT(max(p) + 1)

@@ -10,7 +10,7 @@ def scatter(p, n):
     return [p[i::n] for i in range(n)]
 
 
-def rrotate(p):
+def rotate_cw(p):
     h, w = len(p), len(p[0])
     ret = [['' for _ in range(h)] for _ in range(w)]
     for i in range(h):
@@ -19,7 +19,7 @@ def rrotate(p):
     return ret
 
 
-def lrotate(p):
+def rotate_ccw(p):
     h, w = len(p), len(p[0])
     ret = [['' for _ in range(h)] for _ in range(w)]
     for i in range(h):
@@ -56,8 +56,8 @@ def example():
     print(scatter(p, 3))
 
     p = [[0, 1, 2], [3, 4, 5], [6, 7, 8]]
-    print(rrotate(p))
-    print(lrotate(p))
+    print(rotate_cw(p))
+    print(rotate_ccw(p))
     print(transpose(p))
 
     p = ['....', '###.', '.#..', '....']
