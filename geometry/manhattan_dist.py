@@ -7,48 +7,54 @@ class SegTree:
 
 def manhattan_mst(n, xs, ys):
     '''各座標から他座標のうちマンハッタン距離の最小値を算出'''
+    assert n == len(xs) == len(ys)
     INF = maxsize
     ret = [INF for _ in range(n)]
 
-    xy = [(i, j) for i, j in zip(xs, ys)]
+    xy = [(x, y, i) for i, (x, y) in enumerate(zip(xs, ys))]
     xy.sort()
-    x = [x for x, _ in xy]
-    y = [y for _, y in xy]
+    x = [x for x, _, _ in xy]
+    y = [y for _, y, _ in xy]
+    indices = [i for _, _, i in xy]
+    values = sorted(set(y))
+    ranks = {v: i for i, v in enumerate(values)}
+    yi = [ranks[v] for v in y]
+    m = len(values)
 
     def op(x, y): return min(x, y)
     def e(): return INF
 
     # xi > xj, yi > yj
-    st = SegTree(op, e, n)
+    st = SegTree(op, e, m)
     for i in range(n):
-        v = st.prod(0, y[i] + 1)
-        if v != -INF:
-            ret[i] = min(ret[i], x[i] + y[i] + v)
-        st.set(y[i], -x[i] - y[i])
+        v = st.prod(0, yi[i] + 1)
+        if v != INF:
+            ret[indices[i]] = min(ret[indices[i]], x[i] + y[i] + v)
+        st.set(yi[i], -x[i] - y[i])
 
     # xi > xj, yi < yj
-    st = SegTree(op, e, n)
+    st = SegTree(op, e, m)
     for i in range(n):
-        v = st.prod(y[i], n)
+        v = st.prod(yi[i], m)
         if v != INF:
-            ret[i] = min(ret[i], x[i] - y[i] + v)
-        st.set(y[i], -x[i] + y[i])
+            ret[indices[i]] = min(ret[indices[i]], x[i] - y[i] + v)
+        st.set(yi[i], -x[i] + y[i])
 
     # xi < xj, yi > yj
-    st = SegTree(op, e, n)
+    st = SegTree(op, e, m)
     for i in range(n - 1, -1, -1):
-        v = st.prod(0, y[i] + 1)
+        v = st.prod(0, yi[i] + 1)
         if v != INF:
-            ret[i] = min(ret[i], -x[i] + y[i] + v)
-        st.set(y[i], x[i] - y[i])
+            ret[indices[i]] = min(ret[indices[i]], -x[i] + y[i] + v)
+        st.set(yi[i], x[i] - y[i])
 
     # xi < xj, yi < yj
-    st = SegTree(op, e, n)
+    st = SegTree(op, e, m)
     for i in range(n - 1, -1, -1):
-        v = st.prod(y[i], n)
+        v = st.prod(yi[i], m)
         if v != INF:
-            ret[i] = min(ret[i], -x[i] - y[i] + v)
-        st.set(y[i], x[i] + y[i])
+            ret[indices[i]] = min(ret[indices[i]], -x[i] - y[i] + v)
+        st.set(yi[i], x[i] + y[i])
 
     return ret
 

@@ -26,11 +26,12 @@ class Sfol:
     '''Standard Form of a Line (ax + by = c)'''
 
     def __init__(self, x1, y1, x2, y2):
+        assert x1 != x2 or y1 != y2
         self.a = y1 - y2
         self.b = x2 - x1
-        if self.a == 0:    # 垂直
+        if self.a == 0:    # 水平
             self.b = 1
-        elif self.b == 0:  # 水平
+        elif self.b == 0:  # 垂直
             self.a = 1
         else:
             g = gcd(self.b, self.a)
@@ -113,6 +114,8 @@ class Vec:
 
 def calc_distance(px, py, ax, ay, bx, by):
     '''点Pと線分ABとの距離'''
+    if ax == bx and ay == by:
+        return ((px - ax) ** 2 + (py - ay) ** 2) ** 0.5
     ap = Vec(px - ax, py - ay)
     ab = Vec(bx - ax, by - ay)
     bp = Vec(px - bx, py - by)
@@ -127,9 +130,9 @@ def calc_distance(px, py, ax, ay, bx, by):
         # 点Pから線分ABへの垂線が最短距離
         sfol = Sfol(ax, ay, bx, by)
         if sfol.a == 0:
-            return abs(px - ax)
-        elif sfol.b == 0:
             return abs(py - ay)
+        elif sfol.b == 0:
+            return abs(px - ax)
         else:
             u = abs(sfol.a * px + sfol.b * py - sfol.c)
             v = (sfol.a ** 2 + sfol.b ** 2) ** 0.5
@@ -147,29 +150,14 @@ def calc_intersection_point(px, py, ax, ay, bx, by):
 
 def intersect(ax, ay, bx, by, cx, cy, dx, dy):
     '''線分ABと線分CDが交差するか判定'''
-    if Sfol(ax, ay, bx, by) == Sfol(cx, cy, dx, dy):
-        ax, bx = min(ax, bx), max(ax, bx)
-        cx, dx = min(cx, dx), max(cx, dx)
-        if max(ax, cx) > min(bx, dx):
-            return False
-        ay, by = min(ay, by), max(ay, by)
-        cy, dy = min(cy, dy), max(cy, dy)
-        if max(ay, cy) > min(by, dy):
-            return False
-        return True
-    else:
-        ab = Vec(bx - ax, by - ay)
-        ac = Vec(cx - ax, cy - ay)
-        ad = Vec(dx - ax, dy - ay)
-        s = ab.cross(ac)
-        t = ab.cross(ad)
-        if s * t > 0:
-            return False
-        cd = Vec(dx - cx, dy - cy)
-        ca = Vec(ax - cx, ay - cy)
-        cb = Vec(bx - cx, by - cy)
-        s = cd.cross(ca)
-        t = cd.cross(cb)
-        if s * t > 0:
-            return False
-        return True
+    def cross(x1, y1, x2, y2, x3, y3):
+        return (x2 - x1) * (y3 - y1) - (y2 - y1) * (x3 - x1)
+
+    s = cross(ax, ay, bx, by, cx, cy)
+    t = cross(ax, ay, bx, by, dx, dy)
+    u = cross(cx, cy, dx, dy, ax, ay)
+    v = cross(cx, cy, dx, dy, bx, by)
+    if s == t == u == v == 0:
+        return (max(min(ax, bx), min(cx, dx)) <= min(max(ax, bx), max(cx, dx)) and
+                max(min(ay, by), min(cy, dy)) <= min(max(ay, by), max(cy, dy)))
+    return s * t <= 0 and u * v <= 0
