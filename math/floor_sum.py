@@ -1,5 +1,5 @@
 def floor_sum(n, m, a, b):
-    '''(a * i + b) // m (i: [0, n])'''
+    '''(a * i + b) // m の総和 (0 <= i < n)'''
     ans = 0
     if a >= m:
         ans += (n - 1) * n * (a // m) // 2

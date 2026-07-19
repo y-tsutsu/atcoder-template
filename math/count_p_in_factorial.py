@@ -13,9 +13,11 @@ def count_p_in_double_factorial(n, p):
     if n % 2 == 0:
         m = n // 2
         if p == 2:
-            return count_p_in_factorial(m, p) + count_p_in_factorial(m, 2)
+            return m + count_p_in_factorial(m, 2)
         else:
             return count_p_in_factorial(m, p)
     else:
+        if p == 2:
+            return 0
         m = (n + 1) // 2
         return count_p_in_factorial(n, p) - count_p_in_factorial(m - 1, p)

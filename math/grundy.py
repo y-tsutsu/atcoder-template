@@ -40,6 +40,6 @@ def grundyp(n, p: list):
 
 def grundylr(n, le, ri):
     '''0～nまでのGrundy数を計算. 遷移は[le, ri]の範囲で石を取り除く. この場合は周期性があり計算可能'''
-    def _grundy(x): (x % (le + ri)) // le
+    def _grundy(x): return (x % (le + ri)) // le
     g = [_grundy(i) for i in range(n + 1)]
     return g
