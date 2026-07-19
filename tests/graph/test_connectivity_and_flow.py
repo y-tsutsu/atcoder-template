@@ -64,8 +64,29 @@ class TestConnectivityAndFlow(unittest.TestCase):
 
     def test_directed_cycle(self):
         find_cycle = self.find_cycle_module['find_cycle']
-        self.assertTrue(find_cycle(3, [[1], [2], [0]]))
-        self.assertFalse(find_cycle(3, [[1], [2], []]))
+        has_cycle = self.find_cycle_module['has_cycle']
+        self.assertEqual(find_cycle(3, [[1], [2], [0]]), [0, 1, 2])
+        self.assertEqual(find_cycle(3, [[1], [2], []]), [])
+        self.assertTrue(has_cycle(3, [[1], [2], [0]]))
+        self.assertFalse(has_cycle(3, [[1], [2], []]))
+
+    def test_directed_cycle_with_self_loop(self):
+        find_cycle = self.find_cycle_module['find_cycle']
+        self.assertEqual(find_cycle(3, [[], [1], []]), [1])
+
+    def test_directed_cycle_in_disconnected_graph(self):
+        find_cycle = self.find_cycle_module['find_cycle']
+        to = [[1], [], [3], [4], [2]]
+        cycle = find_cycle(5, to)
+        self.assertEqual(set(cycle), {2, 3, 4})
+        for v, u in zip(cycle, cycle[1:] + cycle[:1]):
+            self.assertIn(u, to[v])
+
+    def test_directed_cycle_without_recursion(self):
+        find_cycle = self.find_cycle_module['find_cycle']
+        n = 10000
+        to = [[i + 1] for i in range(n - 1)] + [[0]]
+        self.assertEqual(find_cycle(n, to), list(range(n)))
 
     def test_functional_graph_cycles(self):
         self.assertEqual(find_functional_cycles(7, [1, 2, 0, 4, 3, 2, 5]), [[0, 1, 2], [3, 4]])
