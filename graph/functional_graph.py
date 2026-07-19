@@ -1,5 +1,5 @@
-def find_cycle(n, f):
-    '''Functional Graphのループ箇所を抽出'''
+def find_cycles(n, f):
+    '''Functional Graphに含まれるすべてのサイクルを頂点列で返す'''
     done = [0 for _ in range(n)]
     ret = []
     for i in range(n):

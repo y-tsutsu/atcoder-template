@@ -29,17 +29,17 @@ class TestFactorialAndGrundy(unittest.TestCase):
                 self.assertEqual(count(n, p), expected)
 
     def test_grundy_from_transition_function(self):
-        grundyf = self.grundy['grundyf']
-        actual = grundyf(10, lambda x: [x - d for d in (2, 3) if x >= d])
+        grundy_by_transition = self.grundy['grundy_by_transition']
+        actual = grundy_by_transition(10, lambda x: [x - d for d in (2, 3) if x >= d])
         self.assertEqual(actual, [0, 0, 1, 1, 2, 0, 0, 1, 1, 2, 0])
 
     def test_grundy_from_costs(self):
-        grundyp = self.grundy['grundyp']
-        self.assertEqual(grundyp(10, [2, 3]), [0, 0, 1, 1, 2, 0, 0, 1, 1, 2, 0])
+        grundy_by_moves = self.grundy['grundy_by_moves']
+        self.assertEqual(grundy_by_moves(10, [2, 3]), [0, 0, 1, 1, 2, 0, 0, 1, 1, 2, 0])
 
     def test_grundy_range(self):
-        grundylr = self.grundy['grundylr']
-        self.assertEqual(grundylr(10, 2, 3), [0, 0, 1, 1, 2, 0, 0, 1, 1, 2, 0])
+        grundy_by_range = self.grundy['grundy_by_range']
+        self.assertEqual(grundy_by_range(10, 2, 3), [0, 0, 1, 1, 2, 0, 0, 1, 1, 2, 0])
 
 
 if __name__ == '__main__':

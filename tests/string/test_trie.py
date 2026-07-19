@@ -3,13 +3,13 @@ import unittest
 from tests.string._loader import load_string_module
 
 
-class TestTrieTree(unittest.TestCase):
+class TestTrie(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.TrieTree = load_string_module('trie_tree')['TrieTree']
+        cls.Trie = load_string_module('trie')['Trie']
 
     def setUp(self):
-        self.trie = self.TrieTree()
+        self.trie = self.Trie()
         for word in ('abcd', 'abcc', 'abxyz', 'abx', 'abxy', 'b', 'bb', 'bbb', 'ccc'):
             self.trie.insert(word)
 

@@ -1,6 +1,6 @@
 import unittest
 
-from graph.functional_graph import find_cycle as find_functional_cycles
+from graph.functional_graph import find_cycles as find_functional_cycles
 from tests.graph._loader import load_graph_module
 
 
@@ -23,7 +23,7 @@ class TestConnectivityAndFlow(unittest.TestCase):
             self.Dinic(1).flow(0, 0)
 
     def test_bipartite_matching(self):
-        matching = self.bipartite_matching['BpMatch'](3, 3)
+        matching = self.bipartite_matching['BipartiteMatching'](3, 3)
         for edge in [(0, 0), (0, 1), (1, 1), (2, 2)]:
             matching.add_edge(*edge)
         self.assertEqual(matching.flow(), 3)

@@ -1,4 +1,4 @@
-class TrieTree:
+class Trie:
     '''文字列の検索・prefix検索・辞書順操作を文字列長に比例する時間で行うTrie木'''
 
     class Node:
@@ -10,7 +10,7 @@ class TrieTree:
             self.terminal_count = 0
 
     def __init__(self):
-        self._root = TrieTree.Node()
+        self._root = Trie.Node()
         self._distinct_size = 0
 
     def __len__(self):
@@ -23,7 +23,7 @@ class TrieTree:
         node.prefix_count += 1
         for c in text:
             if c not in node.children:
-                node.children[c] = TrieTree.Node()
+                node.children[c] = Trie.Node()
             node = node.children[c]
             node.prefix_count += 1
         if node.terminal_count == 0:
@@ -196,7 +196,7 @@ class TrieTree:
 
 
 def example():
-    trie = TrieTree()
+    trie = Trie()
     for word in ('app', 'apple', 'apple', 'apply', 'bat'):
         trie.insert(word)  # 登録し、文字列の終端ノードを返す
 

@@ -2,7 +2,9 @@ class Dinic:
     pass
 
 
-class BpMatch:
+class BipartiteMatching:
+    '''Dinicを使って二部グラフの最大マッチングを求める'''
+
     def __init__(self, n0, n1, v0=1, v1=1):
         self._n0 = n0
         self._n1 = n1
