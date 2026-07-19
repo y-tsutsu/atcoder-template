@@ -198,34 +198,49 @@ class TrieTree:
 def example():
     trie = TrieTree()
     for word in ('app', 'apple', 'apple', 'apply', 'bat'):
-        trie.insert(word)
+        trie.insert(word)  # 登録し、文字列の終端ノードを返す
+
+    # 登録数（重複込み）と異なる文字列数
+    print(len(trie))                    # 5
+    print(trie.distinct_size())         # 4
 
     # 完全一致の検索と登録数
-    print(trie.search('apple'))       # True
-    print(trie.search('ap'))          # False
-    print(trie.count('apple'))        # 2
+    print(trie.search('apple'))         # True
+    print(trie.search('ap'))            # False
+    print(trie.count('apple'))          # 2
 
     # prefix検索と、そのprefixを持つ文字列数
-    print(trie.prefix_with('app'))     # True
-    print(trie.count_prefix('app'))    # 4
-    print(trie.count_prefix('cat'))    # 0
+    print(trie.prefix_with('app'))      # True
+    print(trie.count_prefix('app'))     # 4
+    print(trie.count_prefix('cat'))     # 0
+    print(trie.common_prefix_with('app'))    # True: 4個が共有
+    print(trie.common_prefix_with('apply'))  # False: 1個だけ
 
     # 入力文字列のprefixとして登録済みの文字列を探す
-    print(trie.prefixes('applepie'))   # [('app', 1), ('apple', 2)]
+    print(trie.prefixes('applepie'))     # [('app', 1), ('apple', 2)]
     print(trie.longest_prefix('apply'))  # apply
 
+    # 入力文字列のうち、2個以上の登録文字列が共有する最長prefix
+    print(trie.lcp('apply'))            # appl
+    print(trie.lcp('apple'))            # apple（appleは2個登録済み）
+
     # 辞書順列挙とk番目の文字列（重複を含む）
-    print(trie.items('app'))           # [('app', 1), ('apple', 2), ('apply', 1)]
-    print(trie.words())                # app, apple, apple, apply, bat
-    print(trie.kth(3))                 # apply
+    print(trie.items('app'))            # [('app', 1), ('apple', 2), ('apply', 1)]
+    print(trie.words())                 # ['app', 'apple', 'apple', 'apply', 'bat']
+    print(trie.kth(3))                  # apply
+
+    # 二分探索と同じく、辞書順でtextの挿入位置を取得する
+    print(trie.bisect_left('apply'))    # 3: applyより小さい文字列数
+    print(trie.bisect_right('apply'))   # 4: apply以下の文字列数
 
     # 登録されていない文字列に対しても辞書順の前後を探せる
-    print(trie.prev('ball'))            # apply
-    print(trie.next('ball'))            # bat
+    print(trie.prev('ball'))             # apply
+    print(trie.next('ball'))             # bat
 
-    # 1個ずつ削除でき、登録数が0になると検索にもヒットしなくなる
-    trie.erase('apple')
-    print(trie.count('apple'))         # 1
+    # 1個ずつ削除し、削除対象が存在したかを返す
+    print(trie.erase('apple'))          # True
+    print(trie.count('apple'))          # 1
+    print(trie.erase('unknown'))        # False
 
 
 if __name__ == '__main__':
