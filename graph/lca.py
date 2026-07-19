@@ -4,8 +4,9 @@ def bootstrap(func=None, stack=[]):
 
 class LCA:
     def __init__(self, n):
+        assert n > 0
         self._n = n
-        self._LOG = (n - 1).bit_length()
+        self._LOG = max(1, (n - 1).bit_length())
         self._to = [[] for _ in range(n)]
         self._parent = [[-1 for _ in range(n)] for _ in range(self._LOG)]
         self._depth = [0 for _ in range(n)]
@@ -56,6 +57,8 @@ class LCA:
 
     def kth_ancestor(self, v, k):
         '''vのk個上の祖先'''
+        if k < 0 or self._depth[v] < k:
+            return -1
         for i in range(self._LOG):
             if v < 0:
                 return -1
@@ -67,8 +70,11 @@ class LCA:
         '''u -> vのパス上でk番目のノード'''
         x = self.lca(u, v)
         d1 = self._depth[u] - self._depth[x]
+        d2 = self._depth[v] - self._depth[x]
+        if k < 0 or d1 + d2 < k:
+            return -1
         if k <= d1:
             return self.kth_ancestor(u, k)
         else:
-            k2 = self._depth[v] - self._depth[x] - (k - d1)
+            k2 = d2 - (k - d1)
             return self.kth_ancestor(v, k2)

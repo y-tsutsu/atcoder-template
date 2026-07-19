@@ -54,6 +54,7 @@ class Dinic:
         yield 0
 
     def flow(self, s, t):
+        assert s != t
         flow = 0
         INF = maxsize
         while self._bfs(s, t):

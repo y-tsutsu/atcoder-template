@@ -6,13 +6,14 @@ class SegTree:
 
 
 def cartesian_tree(n, p):
+    assert n == len(p) and len(set(p)) == n
     def op(x, y): return max(x, y)
-    def e(): return -1
+    def e(): return -(1 << 62)
     st = SegTree(op, e, n, p)
     to = [[] for _ in range(n)]
     pos = {x: i for i, x in enumerate(p)}
     dq = deque()
-    dq.append((n, (0, n)))
+    dq.append((max(p), (0, n)))
     while dq:
         v, (le, ri) = dq.popleft()
         i = pos[v]

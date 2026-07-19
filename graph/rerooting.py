@@ -69,8 +69,11 @@ def example0():
     n = 100
     e = -(1 << 62)
 
+    # merge: 各隣接頂点から届く「最遠点までの距離」の最大値を取る
     def merge(a, b): return max(a, b)
+    # finish: 頂点 v 自身までの距離 0 も候補に加える
     def finish(x, v): return max(x, 0)
+    # lift: 隣接頂点の答えを辺越しに運ぶため、距離を 1 増やす
     def lift(x, data): return x + 1
 
     rr = Rerooting(n, e, merge, finish, lift)
@@ -88,13 +91,16 @@ def example1():
     n = 100
     e = (0, 0)  # (距離和, 頂点数)
 
+    # merge: 各隣接方向の距離和と頂点数をそれぞれ足し合わせる
     def merge(a, b):
         return (a[0] + b[0], a[1] + b[1])
 
+    # finish: 頂点 v 自身を距離 0 の頂点として頂点数に加える
     def finish(x, v):
         dist_sum, size = x
         return (dist_sum, size + 1)
 
+    # lift: 辺を一つ越すと各頂点への距離が 1 増えるため、距離和に頂点数を足す
     def lift(x, data):
         dist_sum, size = x
         return (dist_sum + size, size)
@@ -115,8 +121,11 @@ def example2():
     n = 100
     e = -(1 << 62)
 
+    # merge: 各隣接頂点から届く「最遠点までの距離」の最大値を取る
     def merge(a, b): return max(a, b)
+    # finish: 頂点 v 自身までの距離 0 も候補に加える
     def finish(x, v): return max(x, 0)
+    # lift: 隣接頂点の答えを辺越しに運ぶため、距離に辺の重みを加える
     def lift(x, data): return x + data
 
     rr = Rerooting(n, e, merge, finish, lift)

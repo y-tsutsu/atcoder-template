@@ -2,6 +2,7 @@ from collections import deque
 
 
 def diameter(n, to):
+    '''辺の重みが非負の木の直径を算出'''
     def bfs(i, d):
         dq = deque()
         dq.append(i)
