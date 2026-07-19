@@ -13,6 +13,13 @@ class TestMoAlgorithm(unittest.TestCase):
         ordered = mo(queries, len(queries), 10)
         self.assertEqual(sorted(ordered), list(enumerate(queries)))
 
+    def test_empty(self):
+        self.assertEqual(mo([], 0, 10), [])
+
+    def test_block_size_is_at_least_one(self):
+        queries = [(0, 1) for _ in range(4)]
+        self.assertEqual(sorted(mo(queries, len(queries), 1)), list(enumerate(queries)))
+
 
 if __name__ == '__main__':
     unittest.main()

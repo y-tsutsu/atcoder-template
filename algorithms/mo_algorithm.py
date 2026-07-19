@@ -3,7 +3,9 @@ from math import isqrt
 
 
 def mo(xy, q, n):
-    w = n // isqrt(q)
+    if q == 0:
+        return []
+    w = max(1, n // isqrt(q))
     e = [x // w for x, y in xy]
     p = [(i, (x, y)) for i, (x, y) in enumerate(xy)]
 
