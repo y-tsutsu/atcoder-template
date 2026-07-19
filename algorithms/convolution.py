@@ -1,4 +1,13 @@
 def convolution(a, b, mod=998244353, m=23, W=31):
+    '''数列a, bの畳み込みをNTTで計算する'''
+    if not a or not b:
+        return []
+
+    result_length = len(a) + len(b) - 1
+    n = 1 << (result_length - 1).bit_length()
+    if n > 1 << m:
+        raise ValueError('入力がNTTで扱える最大長を超えています')
+
     def _dft(a, w):
         if len(a) == 1:
             return
@@ -32,10 +41,10 @@ def convolution(a, b, mod=998244353, m=23, W=31):
 
     w = [pow(W, 2 ** i, mod) for i in range(m, -1, -1)]
     iw = [pow(v, -1, mod) for v in w]
-    n = 2 ** (len(a) + len(b) - 2).bit_length()
-    a, b = [x % mod for x in a] + [0 for _ in range(n - len(b))], [x % mod for x in b] + [0 for _ in range(n - len(b))]
+    a = [x % mod for x in a] + [0 for _ in range(n - len(a))]
+    b = [x % mod for x in b] + [0 for _ in range(n - len(b))]
     _dft(a, w)
     _dft(b, w)
     ret = [(a[i] * b[i]) % mod for i in range(n)]
     _idft(ret, iw)
-    return ret
+    return ret[:result_length]

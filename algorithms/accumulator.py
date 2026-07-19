@@ -76,7 +76,17 @@ def imos2d_helper(h, w):
         for i, j, v in [(si, sj, x), (ei, sj, -x), (si, ej, -x), (ei, ej, x)]:
             p[i][j] += v
 
-    def builder(): return accumulate2dim(p)
+    def builder():
+        for i in range(h + 1):
+            for j in range(w):
+                p[i][j + 1] += p[i][j]
+        for i in range(h):
+            for j in range(w + 1):
+                p[i + 1][j] += p[i][j]
+        p.pop()
+        for row in p:
+            row.pop()
+        return p
 
     return setter, builder
 
@@ -89,6 +99,24 @@ def imos3d_helper(d, h, w):
                            (si, sj, ek, -x), (ei, sj, ek, x), (si, ej, ek, x), (ei, ej, ek, -x)]:
             p[i][j][k] += v
 
-    def builder(): return accumulate3dim(p)
+    def builder():
+        for i in range(d + 1):
+            for j in range(h + 1):
+                for k in range(w):
+                    p[i][j][k + 1] += p[i][j][k]
+        for i in range(d + 1):
+            for j in range(h):
+                for k in range(w + 1):
+                    p[i][j + 1][k] += p[i][j][k]
+        for i in range(d):
+            for j in range(h + 1):
+                for k in range(w + 1):
+                    p[i + 1][j][k] += p[i][j][k]
+        p.pop()
+        for plane in p:
+            plane.pop()
+            for row in plane:
+                row.pop()
+        return p
 
     return setter, builder
