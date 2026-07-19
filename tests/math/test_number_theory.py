@@ -57,6 +57,26 @@ class TestNumberTheory(unittest.TestCase):
         with self.assertRaises(AssertionError):
             prime_factorize(0)
 
+    def test_prime_factorizer(self):
+        factorizer = self.prime_module['PrimeFactorizer'](100)
+        expected = {
+            1: [],
+            2: [2],
+            12: [2, 2, 3],
+            49: [7, 7],
+            60: [2, 2, 3, 5],
+            97: [97],
+            100: [2, 2, 5, 5],
+        }
+        for n, factors in expected.items():
+            self.assertEqual(factorizer.factorize(n), factors)
+
+        self.assertEqual(factorizer.factorize_count(60), {2: 2, 3: 1, 5: 1})
+        with self.assertRaises(AssertionError):
+            factorizer.factorize(0)
+        with self.assertRaises(AssertionError):
+            factorizer.factorize(101)
+
     def test_system_of_equations_with_unique_solution(self):
         solve = self.system_module['system_of_equations']
         unique = self.system_module['UNIQUE']
