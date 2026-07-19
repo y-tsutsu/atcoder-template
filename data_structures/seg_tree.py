@@ -15,7 +15,7 @@ class SegTree:
     def set(self, p, x):
         p += self._size
         self._d[p] = x
-        while p:
+        while p > 1:
             p >>= 1
             self._d[p] = self._op(self._d[p << 1], self._d[p << 1 | 1])
 

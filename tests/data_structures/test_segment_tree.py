@@ -16,6 +16,16 @@ class TestSegmentTree(unittest.TestCase):
         self.assertEqual([st.get(i) for i in range(5)], [5, 2, 10, 4, 5])
         self.assertEqual(st.prod(0, 5), 26)
 
+    def test_segment_tree_set_does_not_update_beyond_root(self):
+        def op(x, y):
+            assert x[1] + y[1] <= 5
+            return x[0] + y[0], x[1] + y[1]
+
+        st = SegTree(op, lambda: (0, 0), 5, [(x, 1) for x in range(5)])
+        st.set(0, (10, 1))
+        st.set(4, (20, 1))
+        self.assertEqual(st.all_prod(), (36, 5))
+
     def test_segment_tree_add_range(self):
         st = SegTreeAddRange(5)
         st.add(1, 4, 2)
