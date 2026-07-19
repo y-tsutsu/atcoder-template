@@ -64,7 +64,7 @@ class BITSortedMultiset:
         return str(p)
 
     def __contains__(self, x):
-        assert x <= self._max
+        assert 0 <= x <= self._max
         return self._bit.get(x) != 0
 
     def __getitem__(self, i):
@@ -78,12 +78,12 @@ class BITSortedMultiset:
         return bisect_ng_ok(0, self._max, f(i))
 
     def add(self, x):
-        assert x <= self._max
+        assert 0 <= x <= self._max
         self._bit.add(x, 1)
         self._size += 1
 
     def discard(self, x):
-        assert x <= self._max
+        assert 0 <= x <= self._max
         if self._bit.get(x) == 0:
             return
         self._bit.add(x, -1)

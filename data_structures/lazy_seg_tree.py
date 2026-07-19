@@ -112,7 +112,7 @@ class LazySegTree():
         s += self._size
         for i in range(self._log, 0, -1):
             self._push(s >> i)
-        sm = self._e
+        sm = self._e()
         while True:
             while s % 2 == 0:
                 s >>= 1
@@ -136,7 +136,7 @@ class LazySegTree():
         r += self._size
         for i in range(self._log, 0, -1):
             self._push((r - 1) >> i)
-        sm = self._e
+        sm = self._e()
         while True:
             r -= 1
             while r > 1 and (r % 2):

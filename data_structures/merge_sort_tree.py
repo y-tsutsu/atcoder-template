@@ -42,3 +42,14 @@ class MergeSortTree:
             l >>= 1
             r >>= 1
         return ret
+
+
+def example():
+    a = [5, 1, 4, 2, 3]
+    tree = MergeSortTree(len(a), a)
+    print(tree.query(1, 5, 3))       # a[1:5]にある3以下の要素数: 3
+    print(tree.queryex(0, 5, 2, 4))  # a[0:5]にある2以上4以下の要素数: 3
+
+
+if __name__ == '__main__':
+    example()
