@@ -1,5 +1,6 @@
 import unittest
 
+from graph.functional_graph import can_reach_target
 from graph.functional_graph import find_cycles as find_functional_cycles
 from tests.graph._loader import load_graph_module
 
@@ -90,6 +91,18 @@ class TestConnectivityAndFlow(unittest.TestCase):
 
     def test_functional_graph_cycles(self):
         self.assertEqual(find_functional_cycles(7, [1, 2, 0, 4, 3, 2, 5]), [[0, 1, 2], [3, 4]])
+
+    def test_functional_graph_reachability(self):
+        f = [1, 2, 0, 4, 3, 2, 5]
+        target = [False, True, False, False, False, False, False]
+        self.assertEqual(
+            can_reach_target(7, f, target),
+            [True, True, True, False, False, True, True],
+        )
+
+    def test_functional_graph_reachability_without_target(self):
+        f = [1, 2, 0, 4, 3]
+        self.assertEqual(can_reach_target(5, f, [False] * 5), [False] * 5)
 
 
 if __name__ == '__main__':
