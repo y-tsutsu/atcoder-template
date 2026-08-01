@@ -2,6 +2,7 @@ import math
 import unittest
 
 from geometry.geometry import Line
+from geometry.geometry import SortableVec
 from geometry.geometry import calc_distance
 from geometry.geometry import calc_intersection_point
 from geometry.geometry import calc_triangle_area
@@ -26,6 +27,22 @@ class TestGeometry(unittest.TestCase):
         x, y = rotate(2, 1, 1, 1, math.pi / 2)
         self.assertAlmostEqual(x, 1)
         self.assertAlmostEqual(y, 2)
+
+    def test_sortable_vec(self):
+        xy = [(0, -1), (-1, 0), (1, -1), (0, 1), (1, 0), (-1, 1), (1, 1), (-1, -1)]
+        vectors = sorted(SortableVec(x, y) for x, y in xy)
+        self.assertEqual(
+            [(v.x, v.y) for v in vectors],
+            [(1, 0), (1, 1), (0, 1), (-1, 1), (-1, 0), (-1, -1), (0, -1), (1, -1)],
+        )
+
+    def test_sortable_vec_same_direction(self):
+        self.assertEqual(SortableVec(1, 2), SortableVec(2, 4))
+        self.assertNotEqual(SortableVec(1, 2), SortableVec(-1, -2))
+        self.assertEqual(SortableVec(1, 0).get_quadrant(), 0)
+        self.assertEqual(SortableVec(-1, 0).get_quadrant(), 1)
+        with self.assertRaises(AssertionError):
+            SortableVec(0, 0)
 
     def test_standard_form_of_line(self):
         self.assertEqual(Line(0, 1, 2, 1), Line(5, 1, 8, 1))

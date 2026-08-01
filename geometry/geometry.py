@@ -95,15 +95,16 @@ class SortableVec:
         assert x != 0 or y != 0
         self.x = x
         self.y = y
+        self._q = 0 if y > 0 or (y == 0 and x > 0) else 1
 
     def __lt__(self, other):
-        q0, q1 = self.get_quadrant(), other.get_quadrant()
+        q0, q1 = self._q, other._q
         if q0 != q1:
             return q0 < q1
         return self.cross(other) > 0
 
     def __eq__(self, other):
-        q0, q1 = self.get_quadrant(), other.get_quadrant()
+        q0, q1 = self._q, other._q
         if q0 != q1:
             return False
         return True if self.cross(other) == 0 else False
@@ -112,9 +113,7 @@ class SortableVec:
         return f'({self.x}, {self.y})'
 
     def get_quadrant(self):
-        if self.y > 0 or (self.y == 0 and self.x > 0):
-            return 0
-        return 1
+        return self._q
 
     def cross(self, other):
         return self.x * other.y - self.y * other.x
