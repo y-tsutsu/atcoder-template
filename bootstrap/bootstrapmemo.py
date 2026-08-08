@@ -12,6 +12,8 @@ def bootstrapmemo(func=None, stack=[], memo={}, args_list=[]):
         def __init__(self, value):
             self.value = value
 
+    cached = _Cached(None)
+
     if isinstance(memo, dict):
         def getter(t): return memo.get(t, None)
         def setter(t, x): memo[t] = x
@@ -20,14 +22,17 @@ def bootstrapmemo(func=None, stack=[], memo={}, args_list=[]):
         def setter(t, x): memo[t[0]][t[1]] = x
 
     @wraps(func)
-    def wrappedfunc(*args, **kwargs):
+    def wrappedfunc(*args):
         v = getter(args)
         if v is not None:
-            return _Cached(v) if stack else v
+            if stack:
+                cached.value = v
+                return cached
+            return v
         args_list.append(args)
         if stack:
-            return func(*args, **kwargs)
-        to = func(*args, **kwargs)
+            return func(*args)
+        to = func(*args)
         while True:
             if isinstance(to, _Cached):
                 to = stack[-1].send(to.value)

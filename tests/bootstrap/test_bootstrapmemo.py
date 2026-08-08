@@ -29,6 +29,18 @@ class TestBootstrapMemo(unittest.TestCase):
         self.assertEqual(paths(5, 5), 252)
         self.assertEqual(memo[5][5], 252)
 
+    def test_reuses_different_cached_values(self):
+        memo = {}
+
+        @bootstrapmemo(stack=[], memo=memo, args_list=[])
+        def calculate(n):
+            if n <= 1:
+                yield n + 10
+            yield (yield calculate(n - 1)) + (yield calculate(n - 2))
+
+        self.assertEqual(calculate(2), 21)
+        self.assertEqual(calculate(3), 32)
+
 
 if __name__ == '__main__':
     unittest.main()
