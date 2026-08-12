@@ -1,4 +1,4 @@
-from math import comb
+from math import comb, perm
 import unittest
 
 from tests.math._loader import load_math_module
@@ -38,6 +38,16 @@ class TestModularCalculation(unittest.TestCase):
                 for q in range(10):
                     n = q * r
                     self.assertEqual(mdiv2(n, r, mod), q % mod)
+
+    def test_mperm(self):
+        mperm = self.module['mperm']
+        mod = 101
+        for n in range(20):
+            for r in range(n + 1):
+                self.assertEqual(mperm(n, r, mod), perm(n, r) % mod)
+        self.assertEqual(mperm(3, -1, mod), 0)
+        self.assertEqual(mperm(3, 4, mod), 0)
+        self.assertEqual(mperm(-1, 0, mod), 0)
 
     def test_mcomb(self):
         mcomb = self.module['mcomb']

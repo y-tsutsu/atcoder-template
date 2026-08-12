@@ -31,6 +31,16 @@ def mdiv2(n, r, mod):
     return (n % (mod * r)) // r
 
 
+def mperm(n, r, mod):
+    if n < 0 or r < 0 or r > n:
+        return 0
+    ret = 1
+    for i in range(r):
+        ret *= n - i
+        ret %= mod
+    return ret
+
+
 def mcomb(n, r, mod):
     if n < 0 or r < 0 or r > n:
         return 0
