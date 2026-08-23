@@ -36,6 +36,13 @@ class TestUnionFind(unittest.TestCase):
         self.assertEqual(uf.diff(2, 0), -7)
         self.assertIsNone(uf.diff(0, 3))
 
+        root = uf.unite(0, 2, 100)
+        self.assertEqual(root, uf.find(0))
+        self.assertEqual(uf.diff(0, 2), 7)
+
+        uf.unite(2, 3, 5)
+        self.assertEqual(uf.diff(0, 3), 12)
+
     def test_monoid_union_find(self):
         uf = MonoidUnionFind(4, [1, 2, 4, 8], lambda x, y: x + y)
         uf.unite(0, 1)

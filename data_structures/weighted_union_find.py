@@ -16,14 +16,18 @@ class WeightedUnionFind:
     def unite(self, i, j, w):
         rx = self.find(i)
         ry = self.find(j)
+        if rx == ry:
+            return rx
         if self._rank[rx] < self._rank[ry]:
             self._par[rx] = ry
             self._weight[rx] = w - self._weight[i] + self._weight[j]
+            return ry
         else:
             self._par[ry] = rx
             self._weight[ry] = -w - self._weight[j] + self._weight[i]
             if self._rank[rx] == self._rank[ry]:
                 self._rank[rx] += 1
+            return rx
 
     def same(self, i, j):
         return self.find(i) == self.find(j)
