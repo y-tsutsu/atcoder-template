@@ -29,8 +29,17 @@ class DualSegTree:
             p >>= 1
         return ret
 
+    def _push(self, k):
+        self._d[k << 1] = self._op(self._d[k << 1], self._d[k])
+        self._d[k << 1 | 1] = self._op(self._d[k << 1 | 1], self._d[k])
+        self._d[k] = self._e()
+
     def set(self, p, x):
+        k = p + self._size
+        for i in range(self._log, 0, -1):
+            self._push(k >> i)
         self._v[p] = x
+        self._d[k] = self._e()
 
 
 def example():

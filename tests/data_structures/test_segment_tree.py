@@ -38,7 +38,9 @@ class TestSegmentTree(unittest.TestCase):
         st.apply(2, 5, 20)
         self.assertEqual([st.get(i) for i in range(5)], [1, 12, 33, 34, 25])
         st.set(2, 100)
-        self.assertEqual(st.get(2), 130)
+        self.assertEqual([st.get(i) for i in range(5)], [1, 12, 100, 34, 25])
+        st.apply(2, 3, 7)
+        self.assertEqual(st.get(2), 107)
 
     @staticmethod
     def make_lazy_segment_tree(values):

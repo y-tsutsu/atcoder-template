@@ -3,8 +3,11 @@ class OfflineDualSegTree2D:
         self._h = h
         self._w = w
         self._op = op
-        self._size_h = 1 << (h - 1).bit_length()
-        self._size_w = 1 << (w - 1).bit_length()
+        self._e = e
+        self._log_h = (h - 1).bit_length()
+        self._log_w = (w - 1).bit_length()
+        self._size_h = 1 << self._log_h
+        self._size_w = 1 << self._log_w
         self._d = [[e()] * (self._size_w << 1) for _ in range(self._size_h << 1)]
 
     def apply(self, si, sj, ei, ej, x):
@@ -35,6 +38,31 @@ class OfflineDualSegTree2D:
                 row[ej] = op(row[ej], x)
             sj >>= 1
             ej >>= 1
+
+    def _push_w(self, row, k):
+        row[k << 1] = self._op(row[k << 1], row[k])
+        row[k << 1 | 1] = self._op(row[k << 1 | 1], row[k])
+        row[k] = self._e()
+
+    def _push_w_path(self, row, k):
+        for i in range(self._log_w, 0, -1):
+            self._push_w(row, k >> i)
+
+    def _push_h_point(self, k, j):
+        row = self._d[k]
+        self._push_w_path(row, j)
+        self._d[k << 1][j] = self._op(self._d[k << 1][j], row[j])
+        self._d[k << 1 | 1][j] = self._op(self._d[k << 1 | 1][j], row[j])
+        row[j] = self._e()
+
+    def set(self, i, j, x):
+        i += self._size_h
+        j += self._size_w
+        for k in range(self._log_h, 0, -1):
+            self._push_h_point(i >> k, j)
+        row = self._d[i]
+        self._push_w_path(row, j)
+        row[j] = x
 
     def build(self):
         d = self._d
@@ -70,8 +98,11 @@ class OfflineDualSegTree2DMax:
     def __init__(self, h, w, e=-(1 << 62)):
         self._h = h
         self._w = w
-        self._size_h = 1 << (h - 1).bit_length()
-        self._size_w = 1 << (w - 1).bit_length()
+        self._e = e
+        self._log_h = (h - 1).bit_length()
+        self._log_w = (w - 1).bit_length()
+        self._size_h = 1 << self._log_h
+        self._size_w = 1 << self._log_w
         self._d = [[e] * (self._size_w << 1) for _ in range(self._size_h << 1)]
 
     def apply(self, si, sj, ei, ej, x):
@@ -102,6 +133,37 @@ class OfflineDualSegTree2DMax:
                     row[ej] = x
             sj >>= 1
             ej >>= 1
+
+    def _push_w(self, row, k):
+        x = row[k]
+        if row[k << 1] < x:
+            row[k << 1] = x
+        if row[k << 1 | 1] < x:
+            row[k << 1 | 1] = x
+        row[k] = self._e
+
+    def _push_w_path(self, row, k):
+        for i in range(self._log_w, 0, -1):
+            self._push_w(row, k >> i)
+
+    def _push_h_point(self, k, j):
+        row = self._d[k]
+        self._push_w_path(row, j)
+        x = row[j]
+        if self._d[k << 1][j] < x:
+            self._d[k << 1][j] = x
+        if self._d[k << 1 | 1][j] < x:
+            self._d[k << 1 | 1][j] = x
+        row[j] = self._e
+
+    def set(self, i, j, x):
+        i += self._size_h
+        j += self._size_w
+        for k in range(self._log_h, 0, -1):
+            self._push_h_point(i >> k, j)
+        row = self._d[i]
+        self._push_w_path(row, j)
+        row[j] = x
 
     def build(self):
         d = self._d
@@ -135,8 +197,11 @@ class OfflineDualSegTree2DMin:
     def __init__(self, h, w, e=1 << 62):
         self._h = h
         self._w = w
-        self._size_h = 1 << (h - 1).bit_length()
-        self._size_w = 1 << (w - 1).bit_length()
+        self._e = e
+        self._log_h = (h - 1).bit_length()
+        self._log_w = (w - 1).bit_length()
+        self._size_h = 1 << self._log_h
+        self._size_w = 1 << self._log_w
         self._d = [[e] * (self._size_w << 1) for _ in range(self._size_h << 1)]
 
     def apply(self, si, sj, ei, ej, x):
@@ -167,6 +232,37 @@ class OfflineDualSegTree2DMin:
                     row[ej] = x
             sj >>= 1
             ej >>= 1
+
+    def _push_w(self, row, k):
+        x = row[k]
+        if row[k << 1] > x:
+            row[k << 1] = x
+        if row[k << 1 | 1] > x:
+            row[k << 1 | 1] = x
+        row[k] = self._e
+
+    def _push_w_path(self, row, k):
+        for i in range(self._log_w, 0, -1):
+            self._push_w(row, k >> i)
+
+    def _push_h_point(self, k, j):
+        row = self._d[k]
+        self._push_w_path(row, j)
+        x = row[j]
+        if self._d[k << 1][j] > x:
+            self._d[k << 1][j] = x
+        if self._d[k << 1 | 1][j] > x:
+            self._d[k << 1 | 1][j] = x
+        row[j] = self._e
+
+    def set(self, i, j, x):
+        i += self._size_h
+        j += self._size_w
+        for k in range(self._log_h, 0, -1):
+            self._push_h_point(i >> k, j)
+        row = self._d[i]
+        self._push_w_path(row, j)
+        row[j] = x
 
     def build(self):
         d = self._d

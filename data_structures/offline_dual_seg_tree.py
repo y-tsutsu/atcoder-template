@@ -2,7 +2,9 @@ class OfflineDualSegTree:
     def __init__(self, op, e, n):
         self._n = n
         self._op = op
-        self._size = 1 << (n - 1).bit_length()
+        self._e = e
+        self._log = (n - 1).bit_length()
+        self._size = 1 << self._log
         self._d = [e()] * (self._size << 1)
 
     def apply(self, s, e, x):
@@ -20,6 +22,17 @@ class OfflineDualSegTree:
             s >>= 1
             e >>= 1
 
+    def _push(self, k):
+        self._d[k << 1] = self._op(self._d[k << 1], self._d[k])
+        self._d[k << 1 | 1] = self._op(self._d[k << 1 | 1], self._d[k])
+        self._d[k] = self._e()
+
+    def set(self, p, x):
+        k = p + self._size
+        for i in range(self._log, 0, -1):
+            self._push(k >> i)
+        self._d[k] = x
+
     def build(self):
         d = self._d
         op = self._op
@@ -32,7 +45,9 @@ class OfflineDualSegTree:
 class OfflineDualSegTreeMax:
     def __init__(self, n, e=-(1 << 62)):
         self._n = n
-        self._size = 1 << (n - 1).bit_length()
+        self._e = e
+        self._log = (n - 1).bit_length()
+        self._size = 1 << self._log
         self._d = [e] * (self._size << 1)
 
     def apply(self, s, e, x):
@@ -50,6 +65,20 @@ class OfflineDualSegTreeMax:
             s >>= 1
             e >>= 1
 
+    def _push(self, k):
+        x = self._d[k]
+        if self._d[k << 1] < x:
+            self._d[k << 1] = x
+        if self._d[k << 1 | 1] < x:
+            self._d[k << 1 | 1] = x
+        self._d[k] = self._e
+
+    def set(self, p, x):
+        k = p + self._size
+        for i in range(self._log, 0, -1):
+            self._push(k >> i)
+        self._d[k] = x
+
     def build(self):
         for i in range(1, self._size):
             x = self._d[i]
@@ -63,7 +92,9 @@ class OfflineDualSegTreeMax:
 class OfflineDualSegTreeMin:
     def __init__(self, n, e=1 << 62):
         self._n = n
-        self._size = 1 << (n - 1).bit_length()
+        self._e = e
+        self._log = (n - 1).bit_length()
+        self._size = 1 << self._log
         self._d = [e] * (self._size << 1)
 
     def apply(self, s, e, x):
@@ -80,6 +111,20 @@ class OfflineDualSegTreeMin:
                     self._d[e] = x
             s >>= 1
             e >>= 1
+
+    def _push(self, k):
+        x = self._d[k]
+        if self._d[k << 1] > x:
+            self._d[k << 1] = x
+        if self._d[k << 1 | 1] > x:
+            self._d[k << 1 | 1] = x
+        self._d[k] = self._e
+
+    def set(self, p, x):
+        k = p + self._size
+        for i in range(self._log, 0, -1):
+            self._push(k >> i)
+        self._d[k] = x
 
     def build(self):
         for i in range(1, self._size):

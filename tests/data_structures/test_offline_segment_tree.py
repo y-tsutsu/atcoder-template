@@ -13,7 +13,9 @@ class TestOfflineSegmentTree(unittest.TestCase):
         st = OfflineDualSegTree(lambda x, y: x + y, lambda: 0, 5)
         st.apply(1, 4, 2)
         st.apply(2, 5, 3)
-        self.assertEqual(st.build(), [0, 2, 5, 5, 3])
+        st.set(2, 100)
+        st.apply(2, 3, 7)
+        self.assertEqual(st.build(), [0, 2, 107, 5, 3])
 
     def test_specialized_offline_dual_segment_tree(self):
         max_st = OfflineDualSegTreeMax(5)
@@ -21,14 +23,18 @@ class TestOfflineSegmentTree(unittest.TestCase):
         for st in [max_st, min_st]:
             st.apply(1, 4, 5)
             st.apply(2, 5, 3)
-        self.assertEqual(max_st.build(), [-(1 << 62), 5, 5, 5, 3])
-        self.assertEqual(min_st.build(), [1 << 62, 5, 3, 3, 3])
+            st.set(2, 10)
+            st.apply(2, 3, 7)
+        self.assertEqual(max_st.build(), [-(1 << 62), 5, 10, 5, 3])
+        self.assertEqual(min_st.build(), [1 << 62, 5, 7, 3, 3])
 
     def test_offline_dual_segment_tree_2d(self):
         st = OfflineDualSegTree2D(lambda x, y: x + y, lambda: 0, 3, 4)
         st.apply(0, 1, 2, 3, 2)
         st.apply(1, 2, 3, 4, 3)
-        self.assertEqual(st.build(), [[0, 2, 2, 0], [0, 2, 5, 3], [0, 0, 3, 3]])
+        st.set(1, 2, 100)
+        st.apply(1, 2, 2, 3, 7)
+        self.assertEqual(st.build(), [[0, 2, 2, 0], [0, 2, 107, 3], [0, 0, 3, 3]])
 
     def test_specialized_offline_dual_segment_tree_2d(self):
         max_st = OfflineDualSegTree2DMax(2, 3)
@@ -36,8 +42,10 @@ class TestOfflineSegmentTree(unittest.TestCase):
         for st in [max_st, min_st]:
             st.apply(0, 0, 2, 2, 5)
             st.apply(1, 1, 2, 3, 3)
-        self.assertEqual(max_st.build(), [[5, 5, -(1 << 62)], [5, 5, 3]])
-        self.assertEqual(min_st.build(), [[5, 5, 1 << 62], [5, 3, 3]])
+            st.set(1, 1, 10)
+            st.apply(1, 1, 2, 2, 7)
+        self.assertEqual(max_st.build(), [[5, 5, -(1 << 62)], [5, 10, 3]])
+        self.assertEqual(min_st.build(), [[5, 5, 1 << 62], [5, 7, 3]])
 
 
 if __name__ == '__main__':
