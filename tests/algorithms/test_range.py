@@ -1,6 +1,6 @@
 import unittest
 
-from algorithms.range import Range
+from algorithms.range import Range, merge_ranges
 
 
 class TestRange(unittest.TestCase):
@@ -9,7 +9,7 @@ class TestRange(unittest.TestCase):
         self.assertEqual(list(interval), [2, 3, 4])
         self.assertEqual(list(reversed(interval)), [4, 3, 2])
         self.assertEqual(len(interval), 3)
-        self.assertEqual(str(interval), '(2, 5)')
+        self.assertEqual(str(interval), '[2, 5)')
 
     def test_contains(self):
         interval = Range(2, 5)
@@ -18,18 +18,18 @@ class TestRange(unittest.TestCase):
         self.assertIn(Range(3, 5), interval)
         self.assertNotIn(Range(1, 3), interval)
 
-    def test_overlap_and_intersection(self):
+    def test_overlap_and_and_range(self):
         a = Range(1, 5)
         b = Range(3, 7)
         self.assertTrue(a.overlaps(b))
-        self.assertEqual(a.intersection(b), Range(3, 5))
+        self.assertEqual(a.and_range(b), Range(3, 5))
         self.assertFalse(a.overlaps(Range(5, 8)))
-        self.assertIsNone(a.intersection(Range(5, 8)))
+        self.assertIsNone(a.and_range(Range(5, 8)))
 
-    def test_union_and_gap(self):
+    def test_or_range_and_gap(self):
         a = Range(1, 5)
-        self.assertEqual(a.union(Range(5, 8)), Range(1, 8))
-        self.assertIsNone(a.union(Range(6, 8)))
+        self.assertEqual(a.or_range(Range(5, 8)), Range(1, 8))
+        self.assertIsNone(a.or_range(Range(6, 8)))
         self.assertEqual(a.gap(Range(5, 8)), 0)
         self.assertEqual(a.gap(Range(7, 9)), 2)
         self.assertEqual(a.gap(Range(3, 6)), -1)
@@ -42,6 +42,15 @@ class TestRange(unittest.TestCase):
         self.assertEqual(len(Range(2, 2)), 0)
         with self.assertRaises(AssertionError):
             Range(3, 2)
+
+    def test_merge_ranges(self):
+        ranges = [Range(7, 9), Range(1, 3), Range(2, 5), Range(5, 7), Range(11, 12)]
+        self.assertEqual(merge_ranges(ranges), [Range(1, 9), Range(11, 12)])
+
+    def test_merge_ranges_contained_and_empty(self):
+        ranges = [Range(1, 10), Range(3, 5), Range(2, 2), Range(12, 12)]
+        self.assertEqual(merge_ranges(ranges), [Range(1, 10)])
+        self.assertEqual(merge_ranges([]), [])
 
 
 if __name__ == '__main__':
