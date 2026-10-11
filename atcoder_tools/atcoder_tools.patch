@@ -1,7 +1,81 @@
-diff --git a/language.py b/language.py
-index 331c572..c632a02 100644
---- a/language.py
-+++ b/language.py
+diff --git a/client/atcoder.py b/client/atcoder.py
+index 86f0d8e..0d075c5 100644
+--- a/client/atcoder.py
++++ b/client/atcoder.py
+@@ -3,6 +3,7 @@ import re
+ import time
+ import warnings
+ from http.cookiejar import LWPCookieJar
++from email.utils import parsedate_to_datetime
+ from typing import List, Optional, Union
+ from http.cookiejar import Cookie
+ 
+@@ -179,12 +180,55 @@ class AtCoderClient(metaclass=Singleton):
+         return res
+ 
+     def download_problem_content(self, problem: Problem) -> ProblemContent:
+-        resp = self._request(problem.get_url())
+-
+-        try:
+-            return ProblemContent.from_html(resp.text)
+-        except (InputFormatDetectionError, SampleDetectionError) as e:
+-            raise e
++        """Fetch a statement, retrying transient errors up to two times."""
++        url = problem.get_url()
++        retry_statuses = {429, 500, 502, 503, 504}
++        for attempt in range(1, 4):
++            resp = None
++            try:
++                resp = self._request(url, timeout=(10, 30))
++                if resp.headers.get("cf-mitigated") == "challenge":
++                    raise CaptchaError("CAPTCHA detected: {}".format(url))
++                resp.raise_for_status()
++                return ProblemContent.from_html(resp.text)
++            except (requests.ConnectionError, requests.Timeout,
++                    requests.exceptions.ChunkedEncodingError,
++                    requests.HTTPError, InputFormatDetectionError,
++                    SampleDetectionError) as error:
++                if (isinstance(error, requests.HTTPError)
++                        and resp.status_code not in retry_statuses):
++                    raise
++                details = "url={}".format(url)
++                delay = 2 ** attempt
++                if resp is not None:
++                    soup = BeautifulSoup(resp.text, "html.parser")
++                    title = (" ".join(soup.title.get_text().split())[:200]
++                             if soup.title else "<no title>")
++                    details += ", status={}, final_url={}, title={!r}".format(
++                        resp.status_code, resp.url, title)
++                    retry_after = resp.headers.get("Retry-After", "")
++                    if resp.status_code in retry_statuses and retry_after:
++                        try:
++                            seconds = float(retry_after)
++                        except ValueError:
++                            try:
++                                seconds = (parsedate_to_datetime(retry_after)
++                                           .timestamp() - time.time())
++                            except (ValueError, TypeError, OverflowError):
++                                seconds = 0
++                        delay = max(delay, seconds)
++                # Respect Retry-After without waiting indefinitely.
++                if attempt == 3 or delay > 60:
++                    if delay > 60:
++                        details += ", Retry-After exceeds 60-second wait limit"
++                    error.args = ("{} (attempts={}; {})".format(
++                        str(error) or type(error).__name__, attempt, details),)
++                    raise
++                logger.warning(
++                    "Failed to fetch problem (%s; %s). "
++                    "Retrying in %s seconds (attempt %s/3).",
++                    type(error).__name__, details, delay, attempt)
++                time.sleep(delay)
+ 
+     def download_all_contests(self) -> List[Contest]:
+         # アーカイブのページャから最終ページ番号を読み取り、全ページを
+diff --git a/common/language.py b/common/language.py
+index 382eb0a..86bf7b0 100644
+--- a/common/language.py
++++ b/common/language.py
 @@ -124,7 +124,7 @@ PYTHON = Language(
      display_name="Python",
      extension="py",
