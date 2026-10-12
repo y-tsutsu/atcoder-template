@@ -164,10 +164,12 @@ def mgeosummemo(a, r, n, mod):
     yield (x + y) % mod
 
 
+def prime_factorize(x):
+    pass
+
+
 def mlcm(a, mod):
     '''最小公倍数のMOD版'''
-    def prime_factorize(x):
-        pass
     p = [Counter(prime_factorize(x)) for x in a]
     d = defaultdict(int)
     for c in p:

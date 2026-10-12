@@ -45,11 +45,12 @@ def lis(a):
     return max(dp)
 
 
+class SegTree:
+    pass
+
+
 def lis_segtree(a):
     '''最長増加部分列（SegTree ver.）'''
-    class SegTree:
-        pass
-
     def op(x, y): return max(x, y)
     def e(): return 0
     MAX = max(a) + 1
