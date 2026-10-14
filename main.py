@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# https://github.com/y-tsutsu/atcoder-template
 from sys import stdin
 
 _tokens = (y for x in stdin for y in x.split())
