@@ -45,6 +45,25 @@ def merge_ranges(ranges):
     return ret
 
 
+def gaps_in_range(ranges, whole):
+    clipped = []
+    for r in ranges:
+        intersection = r.and_range(whole)
+        if intersection is not None:
+            clipped.append(intersection)
+
+    merged = merge_ranges(clipped)
+    ret = []
+    left = whole.s
+    for r in merged:
+        if left < r.s:
+            ret.append(Range(left, r.s))
+        left = r.e
+    if left < whole.e:
+        ret.append(Range(left, whole.e))
+    return ret
+
+
 def example():
     a = Range(1, 5)  # [1, 5): 1以上5未満
     b = Range(3, 7)  # [3, 7): 3以上7未満
@@ -65,6 +84,9 @@ def example():
 
     ranges = [Range(7, 9), Range(1, 3), Range(2, 5), Range(5, 7), Range(11, 12)]
     print(*merge_ranges(ranges))  # [1, 9) [11, 12)
+
+    whole = Range(0, 15)
+    print(*gaps_in_range(ranges, whole))  # [0, 1) [9, 11) [12, 15): whole内で覆われていない区間
 
 
 if __name__ == '__main__':

@@ -1,6 +1,6 @@
 import unittest
 
-from algorithms.range import Range, merge_ranges
+from algorithms.range import Range, gaps_in_range, merge_ranges
 
 
 class TestRange(unittest.TestCase):
@@ -51,6 +51,26 @@ class TestRange(unittest.TestCase):
         ranges = [Range(1, 10), Range(3, 5), Range(2, 2), Range(12, 12)]
         self.assertEqual(merge_ranges(ranges), [Range(1, 10)])
         self.assertEqual(merge_ranges([]), [])
+
+    def test_gaps_in_range(self):
+        ranges = [Range(6, 10), Range(7, 11), Range(12, 16)]
+        self.assertEqual(
+            gaps_in_range(ranges, Range(0, 20)),
+            [Range(0, 6), Range(11, 12), Range(16, 20)],
+        )
+
+    def test_gaps_in_range_clips_outside_ranges(self):
+        ranges = [Range(-5, 2), Range(4, 6), Range(8, 15)]
+        self.assertEqual(
+            gaps_in_range(ranges, Range(0, 10)),
+            [Range(2, 4), Range(6, 8)],
+        )
+
+    def test_gaps_in_range_empty_and_fully_covered(self):
+        whole = Range(2, 8)
+        self.assertEqual(gaps_in_range([], whole), [whole])
+        self.assertEqual(gaps_in_range([Range(0, 10)], whole), [])
+        self.assertEqual(gaps_in_range([], Range(3, 3)), [])
 
 
 if __name__ == '__main__':
