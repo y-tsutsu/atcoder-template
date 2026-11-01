@@ -3,9 +3,9 @@ from collections import deque
 
 def diameter(n, to):
     '''辺の重みが非負の木の直径を算出'''
-    def bfs(i, d):
+    def bfs(s, d):
         dq = deque()
-        dq.append(i)
+        dq.append(s)
         while dq:
             i = dq.popleft()
             for j, c in to[i]:  # toは重み付き隣接リスト

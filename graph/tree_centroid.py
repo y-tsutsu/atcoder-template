@@ -1,44 +1,50 @@
-from sys import stdin
+def tree_centroids(n, to, vertex_weights=None):
+    '''取り除いた後の各連結成分の重みが全体の半分以下になる頂点を返す'''
+    if vertex_weights is None:
+        vertex_weights = [1] * n
 
-
-_tokens = (y for x in stdin for y in x.split())
-def read(): return next(_tokens)
-def iread(): return int(next(_tokens))
-
-
-def bootstrap(func=None, stack=[]):
-    pass
-
-
-def main():
-    n = iread()
-    to = [[] for _ in range(n)]
-    for _ in range(n - 1):
-        a, b = iread() - 1, iread() - 1
-        to[a].append(b)
-        to[b].append(a)
-    c = [iread() for _ in range(n)]  # 頂点の重み
-    tot = sum(c)
-    q = []  # 重心の個数は1 or 2
-
-    @bootstrap
-    def dfs(i, p):
-        ret = c[i]
-        mx = 0  # 子側の部分木の重みの最大値
+    parent = [-2] * n
+    parent[0] = -1
+    order = [0]
+    for i in order:
         for j in to[i]:
-            if j == p:
+            if j == parent[i]:
                 continue
-            r = yield dfs(j, i)
-            mx = max(mx, r)
-            ret += r
-        mx = max(mx, tot - ret)  # 親側の部分木の重み（自身の頂点の重みも含む）とのmax
-        if mx * 2 <= tot:  # 部分木の重みの2倍がトータルを超えていない頂点が重心
-            q.append(i)
-        yield ret
+            parent[j] = i
+            order.append(j)
 
-    dfs(0, -1)
-    print(q)
+    subtree_weights = vertex_weights[:]
+    for i in reversed(order[1:]):
+        subtree_weights[parent[i]] += subtree_weights[i]
+
+    total = sum(vertex_weights)
+    ret = []
+    for i in range(n):
+        max_component = total - subtree_weights[i]
+        for j in to[i]:
+            if parent[j] == i:
+                max_component = max(max_component, subtree_weights[j])
+        if max_component * 2 <= total:
+            ret.append(i)
+    return ret
+
+
+def example():
+    # 重心は、取り除いた後にできる各連結成分の頂点数を半分以下にする頂点
+    to = [
+        [1, 2, 3, 6],
+        [0],
+        [0],
+        [0, 4],
+        [3, 5],
+        [4],
+        [0],
+    ]
+    print(tree_centroids(7, to))  # [0]
+
+    # 頂点に重みがある場合も同じ関数を使える
+    print(tree_centroids(7, to, [1, 1, 1, 10, 1, 1, 1]))  # [3]
 
 
 if __name__ == '__main__':
-    main()
+    example()

@@ -10,6 +10,8 @@ class TestTreeAlgorithms(unittest.TestCase):
         cls.lca_module = load_graph_module('lca')
         cls.cartesian_tree_module = load_graph_module('cartesian_tree')
         cls.tree_diameter_module = load_graph_module('tree_diameter')
+        cls.tree_center_module = load_graph_module('tree_center')
+        cls.tree_centroid_module = load_graph_module('tree_centroid')
 
     def test_lca(self):
         lca = self.lca_module['LCA'](6)
@@ -43,6 +45,25 @@ class TestTreeAlgorithms(unittest.TestCase):
         s, e, distance = diameter(4, to)
         self.assertEqual(distance, 7)
         self.assertEqual(route(s, e, to), [s, 1, e])
+
+    def test_tree_centers(self):
+        tree_centers = self.tree_center_module['tree_centers']
+        self.assertEqual(tree_centers(1, [[]]), [0])
+        self.assertEqual(tree_centers(4, [[1], [0, 2], [1, 3], [2]]), [1, 2])
+        self.assertEqual(tree_centers(5, [[1], [0, 2], [1, 3], [2, 4], [3]]), [2])
+
+        to = [[1, 2, 3, 6], [0], [0], [0, 4], [3, 5], [4], [0]]
+        self.assertEqual(tree_centers(7, to), [3])
+
+    def test_tree_centroids(self):
+        tree_centroids = self.tree_centroid_module['tree_centroids']
+        self.assertEqual(tree_centroids(1, [[]]), [0])
+        self.assertEqual(tree_centroids(4, [[1], [0, 2], [1, 3], [2]]), [1, 2])
+        self.assertEqual(tree_centroids(5, [[1], [0, 2], [1, 3], [2, 4], [3]]), [2])
+
+        to = [[1, 2, 3, 6], [0], [0], [0, 4], [3, 5], [4], [0]]
+        self.assertEqual(tree_centroids(7, to), [0])
+        self.assertEqual(tree_centroids(7, to, [1, 1, 1, 10, 1, 1, 1]), [3])
 
     def test_rerooting(self):
         rerooting = Rerooting(
