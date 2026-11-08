@@ -189,3 +189,24 @@ def intersect(ax, ay, bx, by, cx, cy, dx, dy):
         return (max(min(ax, bx), min(cx, dx)) <= min(max(ax, bx), max(cx, dx)) and
                 max(min(ay, by), min(cy, dy)) <= min(max(ay, by), max(cy, dy)))
     return s * t <= 0 and u * v <= 0
+
+
+def segment_intersection(ax, ay, bx, by, cx, cy, dx, dy):
+    '''線分ABと線分CDの交点を返し、線分で重なる場合は重なる線分の両端を返す'''
+    if not intersect(ax, ay, bx, by, cx, cy, dx, dy):
+        return None
+
+    s = (bx - ax) * (cy - ay) - (by - ay) * (cx - ax)
+    t = (bx - ax) * (dy - ay) - (by - ay) * (dx - ax)
+    if s == t == 0:
+        ab = sorted([(ax, ay), (bx, by)])
+        cd = sorted([(cx, cy), (dx, dy)])
+        left = max(ab[0], cd[0])
+        right = min(ab[1], cd[1])
+        left = tuple(float(x) for x in left)
+        right = tuple(float(x) for x in right)
+        if left == right:
+            return left
+        return left, right
+
+    return Line(ax, ay, bx, by).intersection(Line(cx, cy, dx, dy))

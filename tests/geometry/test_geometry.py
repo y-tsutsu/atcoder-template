@@ -11,6 +11,7 @@ from geometry.geometry import intersect
 from geometry.geometry import is_collinear
 from geometry.geometry import rotate
 from geometry.geometry import rotate_origin
+from geometry.geometry import segment_intersection
 
 
 class TestGeometry(unittest.TestCase):
@@ -105,6 +106,14 @@ class TestGeometry(unittest.TestCase):
         self.assertFalse(intersect(0, 0, 1, 0, 2, 0, 3, 0))
         self.assertTrue(intersect(0, 1, 0, 1, 0, 0, 0, 2))
         self.assertFalse(intersect(0, 3, 0, 3, 0, 0, 0, 2))
+
+    def test_segment_intersection_point(self):
+        self.assertEqual(segment_intersection(0, 0, 2, 2, 0, 2, 2, 0), (1.0, 1.0))
+        self.assertEqual(segment_intersection(0, 0, 1, 0, 1, 0, 2, 1), (1.0, 0.0))
+        self.assertEqual(segment_intersection(0, 0, 3, 0, 1, 0, 4, 0), ((1.0, 0.0), (3.0, 0.0)))
+        self.assertEqual(segment_intersection(0, 0, 3, 3, 1, 1, 2, 2), ((1.0, 1.0), (2.0, 2.0)))
+        self.assertEqual(segment_intersection(1, 1, 1, 1, 0, 0, 2, 2), (1.0, 1.0))
+        self.assertIsNone(segment_intersection(0, 0, 1, 0, 2, 0, 3, 0))
 
 
 if __name__ == '__main__':
