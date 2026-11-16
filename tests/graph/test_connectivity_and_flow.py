@@ -71,6 +71,21 @@ class TestConnectivityAndFlow(unittest.TestCase):
         self.assertTrue(has_cycle(3, [[1], [2], [0]]))
         self.assertFalse(has_cycle(3, [[1], [2], []]))
 
+    def test_directed_cycle_recursive(self):
+        find_cycle = self.find_cycle_module['find_cycle_recursive']
+        for to, expected in [
+            ([[1], [2], [0]], [0, 1, 2]),
+            ([[1], [0]], [0, 1]),
+            ([[], [1], []], [1]),
+            ([[1, 2], [3], [3], []], []),
+            ([[], [2], [3], [1]], [1, 2, 3]),
+            ([], []),
+        ]:
+            self.assertEqual(find_cycle(len(to), to), expected)
+        n = 3000
+        to = [[i + 1] for i in range(n - 1)] + [[0]]
+        self.assertEqual(find_cycle(n, to), list(range(n)))
+
     def test_directed_cycle_with_self_loop(self):
         find_cycle = self.find_cycle_module['find_cycle']
         self.assertEqual(find_cycle(3, [[], [1], []]), [1])
