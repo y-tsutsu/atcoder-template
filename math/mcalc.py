@@ -202,3 +202,15 @@ def linear_congruence(a, b, mod):
     inv = pow(a, -1, mod)
     r = (b * inv) % mod
     return r, mod
+
+
+def example_linear_congruence():
+    print(linear_congruence(4, 2, 6))  # (2, 3): x = 2, 5, 8, ...
+    print(linear_congruence(4, 1, 6))  # None: 解なし
+
+    # b=0なら、解はstep = mod // gcd(a, mod)の倍数。合同式を解く処理は不要
+    a, mod = 6, 15
+    step = mod // gcd(a, mod)
+    print(step)                       # 5: x = 0, 5, 10, ...
+    n = 20
+    print(n // step)                  # 4: 1以上n以下の解の個数
